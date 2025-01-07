@@ -3,6 +3,8 @@
 
 // js 
 const navItems = [{name: "Home", path: '/'},{name: "Projects", path: '/projects'},{name: "Blog", path: '/blog'},{name: "Notes", path: '/notes'},{name: "About", path: '/about'}, ]
+const { pathname } = Astro.url
+
 ---
 
 <nav class="flex justify-between">
@@ -12,7 +14,7 @@ const navItems = [{name: "Home", path: '/'},{name: "Projects", path: '/projects'
     <div class="flex gap-3">
         {navItems.map((item)=> {
             return <a href={item.path}>{item.name}</a>
-                })}
+        })}
     </div>
   
 
