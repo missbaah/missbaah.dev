@@ -1,8 +1,14 @@
 ---
+import BlogPost from "../components/BlogPost.astro";
 import Layout from "../layouts/Layout.astro";
 
+const allPosts = Object.values(import.meta.glob('./posts/*.md', {eager: true}))
 ---
 
 <Layout>
-    
+    <ul>
+        {allPosts.map((post: any)=>{
+            return <BlogPost title={post.frontmatter.title} url={post.url} date={post.frontmatter.pubDate}/>
+        })}
+    </ul>
 </Layout>

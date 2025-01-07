@@ -5,13 +5,13 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout>
 
-    <div class="flex justify-between items-center">
-    <div class="flex flex-col gap-4">
-        <p class="text-3xl"> Hi, I'm Adwoa <span class="bg-orange-100 text-orange-500 text-lg p-1 rounded-md">(arr-ju-ahh)</span> </p>
+    <div class="flex flex-col md:flex-row justify-between items-center">
+    <div class="flex flex-col gap-4 md:order-1 order-2">
+        <p class="text-2xl md:text-3xl"> Hi, I'm Adwoa <span class="bg-orange-100 text-orange-500 text-lg p-1 rounded-md">(arr-ju-ahh)</span> </p>
         <p>A software developer with over 3 years of experience who loves building beautiful spaces on the internet. Outside of work, I love to read, cook and writing about my experiences</p>
         <p>Find me on </p>
     </div>
-    <img src="/public/profile.png" alt="drawing" width="250" class="items-start">
+    <img src="/public/profile.png" alt="drawing" width="250" class="items-start md:order-2 order-1">
     </div>
 <section>
     <p class="font-bold capitalize text-lg">Featured Projects</p>

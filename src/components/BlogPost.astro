@@ -1,0 +1,8 @@
+---
+const {href, title, date} = Astro.props
+---
+
+<li class="flex gap-7">
+    <p>{date.toString().slice(0,10)}</p>
+    <a href={href}>{title}</a>
+</li>
