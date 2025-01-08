@@ -3,12 +3,32 @@ import BlogPost from "../components/BlogPost.astro";
 import Layout from "../layouts/Layout.astro";
 
 const allPosts = Object.values(import.meta.glob('./posts/*.md', {eager: true}))
+
+// Group posts by years from publication dates
+
+const postByYears:any = allPosts.reduce((acc:any, post:any)=>{
+    const year = new Date(post.frontmatter.pubDate).getFullYear()
+    if (!acc[year]){
+acc[year] = []
+    }
+    acc[year].push(post)
+    return acc
+}, {})
+
 ---
 
-<Layout>
-    <ul>
-        {allPosts.map((post: any)=>{
-            return <BlogPost title={post.frontmatter.title} url={post.url} date={post.frontmatter.pubDate}/>
-        })}
-    </ul>
+<Layout pageTitle='Blog | missbaah'>
+    <p class="mb-8">Here you'll find everything I have to say about my projects, experiences and experiments
+    </p>
+    {Object.entries(postByYears).map(([year, posts]: [string, any]) => (
+        <div class="flex flex-col gap-5" >
+            <h2 class="text-lg">{year}</h2>
+            <ul>
+                {posts.map((post:any) => {
+                    return <BlogPost title={post.frontmatter.title} url={post.url} date={post.frontmatter.pubDate} />
+                }
+                )}
+            </ul>
+        </div>
+    ))}
 </Layout>
