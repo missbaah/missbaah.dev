@@ -8,11 +8,11 @@ const { pathname } = Astro.url
 
 ---
 
-<nav class="flex justify-center md:justify-between">
+<nav class="flex justify-between">
 
 
 <!-- <p>random logo</p> -->
-    <div class="flex gap-3">
+    <div class="flex md:gap-3 gap-5">
         {navItems.map((item)=> {
             return <a class={clsx({'text-neutral-400 border-b pb-[2px]' : item.path === pathname})} href={item.path}>{item.name}</a>
         })}
