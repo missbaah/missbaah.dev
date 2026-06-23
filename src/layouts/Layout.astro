@@ -18,13 +18,13 @@ const { pageTitle } = Astro.props
 		<Font cssVariable="--font-aeonik-pro" />
 		<Font cssVariable="--font-inter" />
 	</head>
-	<body class="mx-auto flex min-h-screen max-w-[872px] flex-col gap-9 bg-white px-6 py-8 text-sm text-black md:gap-9 md:py-16">
+	<body class="flex flex-row gap-[200px] items-start max-w-4xl mx-auto px-4 md:px-0 font-sans mt-[120px]">
 		<Nav />
 		<section class="mt-8">
 			<slot />
 		</section>
 		
-		<Footer />
+		<!-- <Footer /> -->
 	</body>
 </html>
 
