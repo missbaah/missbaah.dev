@@ -1,27 +1,24 @@
 ---
-import ProjectCard from "../components/ProjectCard.astro";
-import Layout from "../layouts/Layout.astro";
-import '../styles/global.css'
-
+import ProjectCard from "../components/ProjectCard.astro"
+import Layout from "../layouts/Layout.astro"
+import { projects } from "../data/project.ts"
+import "../styles/global.css"
 ---
 
-<Layout pageTitle='Projects | missbaah'>
-
-    <div >
-<p class="text-lg capitalize font-bold">Working On</p>
-<p class="mb-8">Here are some of the projects I'm currently working on</p>
+<Layout pageTitle="Projects | missbaah">
+  <div>
+    <p class="text-lg capitalize font-bold">Working On</p>
+    <p class="mb-8">Here are some of the projects I'm currently working on</p>
     <div class="grid md:grid-cols-2 gap-5">
-      <ProjectCard href="/" title="Weekly Habit Tracker Report Card" description="this is a weekly tracker that outputs a report grade for you at the end of the week " link="github.com"/>
-      <ProjectCard href="/" title="Weekly Habit Tracker Report Card" description="this is a weekly tracker that outputs a report grade for you at the end of the week " link="github.com"/>
-      <ProjectCard href="/" title="Weekly Habit Tracker Report Card" description="this is a weekly tracker that outputs a report grade for you at the end of the week " link="github.com"/>
-      <ProjectCard href="/" title="Weekly Habit Tracker Report Card" description="this is a weekly tracker that outputs a report grade for you at the end of the week " link="github.com"/>
+      {
+        projects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            imgsrc={project.imgsrc}
+          />
+        ))
+      }
     </div>
-
-
-    </div>
- 
-
-    
-    
-    
+  </div>
 </Layout>

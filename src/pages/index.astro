@@ -2,7 +2,9 @@
 import type { isLocalsSerializable } from "astro/middleware"
 import BlogPost from "../components/BlogPost.astro"
 import Layout from "../layouts/Layout.astro"
+import { projects } from "../data/project.ts"
 import "../styles/global.css"
+import ProjectCard from "../components/ProjectCard.astro"
 
 const MAX_POSTS = 5
 const allPosts = Object.values(
@@ -38,6 +40,8 @@ const greetings = [
 ]
 
 const { icon, label } = greetings.find((greeting) => time < greeting.before)!
+
+const featuredProjects = projects.filter((project) => project.featured)
 ---
 
 <Layout>
@@ -63,9 +67,7 @@ const { icon, label } = greetings.find((greeting) => time < greeting.before)!
         </div>
       </div>
 
-      <p
-        class="md:w-3/4 font-aeonik text-base text-center md:text-left leading-6"
-      >
+      <p class="font-aeonik text-base text-center md:text-left leading-6">
         I build interfaces that feel considered, currently at Dexwin Tech,
         working on bringing African products to a world class standard. I also
         read too much, think alot about the web and solve word searches p.s
@@ -73,26 +75,27 @@ const { icon, label } = greetings.find((greeting) => time < greeting.before)!
       </p>
     </div>
     <hr class="border-b w-full border-[#EAEAE9]" />
+    <section class="flex flex-col py-4 gap-6">
+      <h2 class="capitalize text-[#595959]">Featured Projects</h2>
+      {
+        featuredProjects.length > 0 ? (
+          featuredProjects.map((project) => {
+            return (
+              <ProjectCard
+                title={project.title}
+                description={project.description}
+                imgsrc={project.imgsrc}
+              />
+            )
+          })
+        ) : (
+          <code> // No featured projects yet</code>
+        )
+      }
+    </section>
   </div>
+
   <!-- <section class="mb-6">
-    <h2 class="font-bold capitalize text-lg mb-6">Featured Projects</h2>
-    {
-      allPosts.length > 0 ? (
-        allPosts.map((post: any) => {
-          return (
-            <BlogPost
-              href={post.url}
-              title={post.frontmatter.title}
-              date={post.frontmatter.pubDate}
-            />
-          )
-        })
-      ) : (
-        <code> // No posts yet</code>
-      )
-    }
-  </section>
-  <section class="mb-6">
     <h2 class="font-bold capitalize text-lg mb-6">Latest Posts</h2>
     {
       allNotes.length > 0 ? (

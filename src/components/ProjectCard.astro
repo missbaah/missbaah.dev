@@ -1,18 +1,15 @@
 ---
 interface Props {
-    title: string;
-    description: string;
-    href: string;
-    link: string;
-
+  title: string
+  description: string
+  imgsrc: string
 }
 
-const { title, description, href, link } = Astro.props;
+const { title, description, imgsrc } = Astro.props
 ---
 
-<a href={href} class="border p-4 rounded-lg hover:shadow-md transition-shadow duration-200 block">
-    <h3 class="capitalize font-semibold">{title}</h3>
-    <p>{description}</p>
-    <p class="mt-2 text-sm text-blue-600 underline">{link}</p>
-</a>
-
+<div
+  class="size-20 rounded-2xl p-4.5 border border-[#EAEAE9] flex items-center justify-center"
+>
+  <img src={imgsrc} alt={title} class="size-16 object-cover" />
+</div>
