@@ -5,7 +5,7 @@ const { href, title, date } = Astro.props
 <li class="flex justify-between items-center w-full">
   <div class="flex gap-2 items-center">
     <span class="i-ph-note-pencil"></span>
-    <a class="font-aeonik text-lg" href={href}>{title}</a>
+    <a class="text-base" href={href}>{title}</a>
   </div>
   <!-- <hr class="border-b w-2/4 border-[#EAEAE9] hid" /> -->
   <p class="text-[#595959] text-sm">{date.toString().slice(0, 10)}</p>
