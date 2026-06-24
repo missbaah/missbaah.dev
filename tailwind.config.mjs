@@ -1,12 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-import { iconsPlugin, getIconCollections } from "@egoist/tailwindcss-icons";
+import { iconsPlugin, getIconCollections } from "@egoist/tailwindcss-icons"
 
 export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {},
     fontFamily: {
-      sans: ["var(--font-aeonik-pro)", "var(--font-inter)", "sans-serif"],
+      sans: ["var(--font-inter)", "sans-serif"],
+      aeonik: ["var(--font-aeonik-pro)", "sans-serif"],
     },
   },
   plugins: [
@@ -14,4 +15,4 @@ export default {
       collections: getIconCollections(["lucide"]),
     }),
   ],
-};
+}
