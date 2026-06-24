@@ -13,8 +13,10 @@ const navItems = [
 const { pathname } = Astro.url
 ---
 
-<nav class="flex flex-col text-[#595959] font-medium w-full md:w-fit">
-  <div class="flex md:flex-col gap-3 justify-between">
+<nav
+  class="flex flex-col text-[#595959] font-medium w-[90%] md:w-fit mx-4 md:mx-0"
+>
+  <div class="flex md:flex-col gap-2 justify-between">
     {
       navItems.map((item) => {
         return (

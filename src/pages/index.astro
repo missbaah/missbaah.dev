@@ -1,4 +1,5 @@
 ---
+import type { isLocalsSerializable } from "astro/middleware"
 import BlogPost from "../components/BlogPost.astro"
 import Layout from "../layouts/Layout.astro"
 import "../styles/global.css"
@@ -12,34 +13,68 @@ const MAX_NOTES = 5
 const allNotes = Object.values(
   import.meta.glob("./notes/*.md", { eager: true })
 ).slice(0, MAX_NOTES)
+
+const time = new Date().toLocaleTimeString([], {
+  hour: "2-digit",
+  minute: "2-digit",
+})
+
+const greetings = [
+  {
+    before: "12:00",
+    label: "Good morning",
+    icon: "i-ph-cloud-fill",
+  },
+  {
+    before: "18:00",
+    label: "Good afternoon",
+    icon: "i-ph-cloud-sun-fill",
+  },
+  {
+    before: "24:00",
+    label: "Good evening",
+    icon: "i-ph-cloud-moon-fill",
+  },
+]
+
+const { icon, label } = greetings.find((greeting) => time < greeting.before)!
 ---
 
 <Layout>
-  <div class="flex flex-col">
-    <img
-      src="/notionface.png"
-      alt="avatar"
-      class="size-32 rounded-full object-center"
-    />
-    <div class="flex flex-col gap-4">
-      <div class="flex gap-2">
-        <h1 class="text-5xl md:text-6xl flex font-aeonik">Hi, I'm Adwoa</h1>
+  <div
+    class="flex flex-col items-center md:items-start gap-6 mt-16 md:mt-0 mx-2"
+  >
+    <div class="text-[#00000066]">
+      <p class="flex gap-2.5 items-center text-sm">
+        <span class={icon}></span>
+        {label} &#x2022; {time}
+      </p>
+    </div>
+    <img src="/notionface.png" alt="avatar" class="md:size-28 size-52" />
+    <div class="flex flex-col gap-6">
+      <div class="flex gap-2 justify-center md:justify-start">
+        <h1 class="text-4xl md:text-5xl flex font-aeonik text-center font-bold">
+          Hi, I'm Adwoa
+        </h1>
         <div class="flex items-center gap-1">
-          <span class="text-[#21222333] text-lg font-bold i-lucide-volume-2"
+          <span class="text-[#00000066] md:text-lg font-bold i-lucide-volume-2"
           ></span>
-          <span class="text-[#21222333] text-lg">Ah-jwah</span>
+          <span class="text-[#00000066] md:text-lg font-bold">Ah-jwah</span>
         </div>
       </div>
 
-      <p class="md:w-3/4 font-aeonik">
+      <p
+        class="md:w-3/4 font-aeonik text-base text-center md:text-left leading-6"
+      >
         I build interfaces that feel considered, currently at Dexwin Tech,
         working on bringing African products to a world class standard. I also
         read too much, think alot about the web and solve word searches p.s
         there's one waiting for you ;)
       </p>
     </div>
+    <hr class="border-b w-full border-[#EAEAE9]" />
   </div>
-  <section class="mb-6">
+  <!-- <section class="mb-6">
     <h2 class="font-bold capitalize text-lg mb-6">Featured Projects</h2>
     {
       allPosts.length > 0 ? (
@@ -74,5 +109,5 @@ const allNotes = Object.values(
         <code> // No notes yet </code>
       )
     }
-  </section>
+  </section> -->
 </Layout>

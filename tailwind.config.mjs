@@ -12,7 +12,7 @@ export default {
   },
   plugins: [
     iconsPlugin({
-      collections: getIconCollections(["lucide"]),
+      collections: getIconCollections(["lucide", "ph"]),
     }),
   ],
 }
