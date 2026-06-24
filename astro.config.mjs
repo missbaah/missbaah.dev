@@ -1,6 +1,6 @@
 // @ts-check
-import { defineConfig, fontProviders } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
+import { defineConfig, fontProviders } from "astro/config"
+import tailwindcss from "@tailwindcss/vite"
 
 // https://astro.build/config
 export default defineConfig({
@@ -24,6 +24,16 @@ export default defineConfig({
             style: "normal",
             src: ["./src/assets/fonts/aeonik-medium.woff2"],
           },
+          {
+            weight: 400,
+            style: "normal",
+            src: ["./src/assets/fonts/aeonik-regular.woff2"],
+          },
+          {
+            weight: 200,
+            style: "normal",
+            src: ["./src/assets/fonts/aeonik-thin.woff2"],
+          },
         ],
       },
     },
@@ -33,4 +43,4 @@ export default defineConfig({
       cssVariable: "--font-inter",
     },
   ],
-});
+})

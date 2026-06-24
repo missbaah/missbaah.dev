@@ -1,6 +1,7 @@
 ---
 //imports
 import clsx from "clsx"
+import Footer from "./Footer.astro"
 
 // js
 const navItems = [
@@ -14,15 +15,18 @@ const { pathname } = Astro.url
 ---
 
 <nav
-  class="flex flex-col text-[#595959] font-medium w-[90%] md:w-fit mx-4 md:mx-0"
+  class="flex flex-col text-[#595959] font-medium w-[85%] lg:w-fit md:w-3/5 mx-4 lg:mx-0 fixed bg-white"
 >
-  <div class="flex md:flex-col gap-2 justify-between">
+  <div class="flex lg:flex-col lg:gap-4 md:gap-2.5 gap-2 justify-between">
     {
       navItems.map((item) => {
         return (
           <a
             class={clsx(
-              { "after:w-1/3 text-black font-bold": item.path === pathname },
+              {
+                "after:w-2/3 lg:after:w-1/3 text-black font-bold":
+                  item.path === pathname,
+              },
               "font-inter relative after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:w-0"
             )}
             href={item.path}
@@ -33,20 +37,6 @@ const { pathname } = Astro.url
       })
     }
   </div>
-  <hr class="my-6 border-t w-1/3 border-[#0000001A] hidden md:block" />
-  <section class="hidden md:block">
-    <p>Find me on</p>
-    <div class="flex gap-3 mt-1.5 text-black text-sm">
-      <a
-        href="https://www.linkedin.com/in/adwoaaddobrako/"
-        target="_blank"
-        class="i-lucide-linkedin text-xl"></a>
-      <a
-        href="https://github.com/missbaah"
-        target="_blank"
-        class="i-lucide-github text-xl"></a>
-      <a href="mailto:missbaah.brako@gmail.com" class="i-lucide-mail text-xl"
-      ></a>
-    </div>
-  </section>
+  <hr class="my-6 border-t w-1/3 border-[#0000001A] hidden lg:block" />
+  <Footer class="hidden lg:block" />
 </nav>

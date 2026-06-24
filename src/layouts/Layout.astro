@@ -18,14 +18,14 @@ const { pageTitle } = Astro.props
     <Font cssVariable="--font-inter" />
   </head>
   <body
-    class="grid md:grid-cols-7 gap-20 items-start max-w-5xl mx-auto px-4 md:px-0 font-sans mt-10 md:mt-20"
+    class="grid lg:grid-cols-9 md:grid-cols-1 gap-10 items-start xl:max-w-6xl lg:max-w-4xl md:max-w-2xl mx-auto px-4 md:px-0 lg:px-0 mt-10 lg:mt-16 overflow-auto relative"
   >
-    <section class="md:col-span-1">
+    <section class="lg:col-span-2">
       <Nav />
     </section>
-    <section class="md:col-span-4">
+    <section class="lg:col-span-5">
       <slot />
     </section>
-    <section class="md:col-span-2">crossword here</section>
+    <section class="lg:col-span-2 sticky top-16">crossword here</section>
   </body>
 </html>

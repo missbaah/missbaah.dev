@@ -1,10 +1,24 @@
 ---
-const year = new Date().getFullYear();
+//imports
+import clsx from "clsx"
+interface FooterProps {
+  class?: string
+}
+
+const { class: className } = Astro.props
 ---
 
-<footer class="flex flex-col mt-auto pt-20 pb-4 md:flex-row md:justify-between">
-     <p>
-        © Adwoa Baah Addo-Brako {year}
-    </p>
-    <p class=" text-orange-900"><span class="i-lucide-hammer text-base"></span> Built with Astro</p>
+<footer class={clsx(className)}>
+  <p>Find me on</p>
+  <div class="flex gap-3 mt-1.5 text-black text-sm">
+    <a
+      href="https://www.linkedin.com/in/adwoaaddobrako/"
+      target="_blank"
+      class="i-lucide-linkedin text-xl"></a>
+    <a
+      href="https://github.com/missbaah"
+      target="_blank"
+      class="i-lucide-github text-xl"></a>
+    <a href="mailto:missbaah.brako@gmail.com" class="i-lucide-mail text-xl"></a>
+  </div>
 </footer>
