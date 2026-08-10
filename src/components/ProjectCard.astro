@@ -1,4 +1,7 @@
 ---
+// imports
+import Dialog from "./Dialog"
+
 interface Props {
   title: string
   description: string
@@ -9,7 +12,9 @@ const { title, description, imgsrc } = Astro.props
 ---
 
 <div
-  class="md:size-28 size-18 rounded-2xl md:rounded-3xl lg:p-3 p-1 border border-[#EAEAE9] flex items-center justify-center"
+  class="md:size-28 size-18 rounded-2xl md:rounded-3xl lg:p-3 p-1 border border-[#EAEAE9] flex items-center justify-center relative"
 >
   <img src={imgsrc} alt={title} class="md:size-24 size-16 object-cover" />
+  <a href="#" class="absolute inset-0"></a>
+  <Dialog title={title} open={true} onOpenChange={() => {}} />
 </div>
