@@ -3,7 +3,7 @@ import BlogPost from "../components/BlogPost.astro"
 import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
 import "../styles/global.css"
-import ProjectCard from "../components/ProjectCard.tsx"
+import ProjectGrid from "../components/ProjectGrid.tsx"
 import Footer from "../components/Footer.astro"
 
 const MAX_POSTS = 3
@@ -81,23 +81,7 @@ const featuredProjects = projects.filter((project) => project.featured)
     <hr class="border-b w-full border-[#EAEAE9] order-5" />
     <section class="flex flex-col py-4 gap-6 w-full order-6">
       <h2 class="capitalize text-secondary">Featured Projects</h2>
-      <div class="flex gap-3 flex-wrap justify-center md:justify-start">
-        {
-          featuredProjects.length > 0 ? (
-            featuredProjects.map((project) => {
-              return (
-                <ProjectCard
-                  title={project.title}
-                  description={project.description}
-                  imgsrc={project.imgsrc}
-                />
-              )
-            })
-          ) : (
-            <code> // No featured projects yet</code>
-          )
-        }
-      </div>
+      <ProjectGrid projects={featuredProjects} client:load />
     </section>
     <hr class="border-b w-full border-[#EAEAE9] order-7" />
     <section class="flex flex-col py-4 gap-6 w-full order-8">

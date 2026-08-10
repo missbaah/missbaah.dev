@@ -13,6 +13,7 @@ import "../styles/global.css"
       {
         projects.map((project) => (
           <ProjectCard
+            client:load
             title={project.title}
             description={project.description}
             imgsrc={project.imgsrc}

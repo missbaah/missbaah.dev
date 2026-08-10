@@ -3,7 +3,6 @@
 import Nav from "../components/Nav.astro"
 import { Font } from "astro:assets"
 import "@radix-ui/themes/styles.css"
-import { Theme } from "@radix-ui/themes"
 
 const { pageTitle } = Astro.props
 ---
@@ -20,16 +19,14 @@ const { pageTitle } = Astro.props
     <Font cssVariable="--font-inter" />
   </head>
   <body>
-    <Theme>
-      <main class="flex flex-col gap-11 items-start px-4 md:px-[20%] my-14">
-        <section>
-          <Nav />
-        </section>
-        <section class="">
-          <slot />
-        </section>
-        <!-- <section class="lg:col-span-2 sticky top-16">crossword here</section> -->
-      </main>
-    </Theme>
+    <main class="flex flex-col gap-11 items-start px-4 md:px-[20%] my-14">
+      <section>
+        <Nav />
+      </section>
+      <section class="">
+        <slot />
+      </section>
+      <!-- <section class="lg:col-span-2 sticky top-16">crossword here</section> -->
+    </main>
   </body>
 </html>
