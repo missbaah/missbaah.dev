@@ -1,4 +1,5 @@
 import { Dialog } from "@radix-ui/themes"
+import type { Dispatch, SetStateAction } from "react"
 
 export default function CustomDialog({
   open,
@@ -6,7 +7,7 @@ export default function CustomDialog({
   title,
 }: {
   open: boolean
-  onOpenChange: () => void
+  onOpenChange: Dispatch<SetStateAction<boolean>>
   title: string
 }) {
   return (

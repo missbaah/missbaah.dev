@@ -21,16 +21,14 @@ const { pageTitle } = Astro.props
   </head>
   <body>
     <Theme>
-      <main
-        class="grid lg:grid-cols-9 md:grid-cols-1 gap-10 items-start xl:max-w-6xl lg:max-w-4xl md:max-w-2xl mx-auto px-4 md:px-0 lg:px-0 my-10 lg:my-16 overflow-auto relative"
-      >
-        <section class="lg:col-span-2">
+      <main class="flex flex-col gap-11 items-start px-4 md:px-[20%] my-14">
+        <section>
           <Nav />
         </section>
-        <section class="lg:col-span-5">
+        <section class="">
           <slot />
         </section>
-        <section class="lg:col-span-2 sticky top-16">crossword here</section>
+        <!-- <section class="lg:col-span-2 sticky top-16">crossword here</section> -->
       </main>
     </Theme>
   </body>

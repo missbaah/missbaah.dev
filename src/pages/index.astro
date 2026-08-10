@@ -3,7 +3,7 @@ import BlogPost from "../components/BlogPost.astro"
 import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
 import "../styles/global.css"
-import ProjectCard from "../components/ProjectCard.astro"
+import ProjectCard from "../components/ProjectCard.tsx"
 import Footer from "../components/Footer.astro"
 
 const MAX_POSTS = 3
@@ -41,6 +41,7 @@ const greetings = [
 
 const { icon, label } = greetings.find((greeting) => time < greeting.before)!
 
+// if it is mobile, show the first 3 featured projects, else show all featured projects
 const featuredProjects = projects.filter((project) => project.featured)
 ---
 
@@ -55,18 +56,18 @@ const featuredProjects = projects.filter((project) => project.featured)
     <img
       src="/notionface.png"
       alt="avatar"
-      class="lg:size-28 size-52 mx-auto lg:mx-0 md:mx-0 order-1 lg:order-2"
+      class="size-52 mx-auto lg:mx-0 md:mx-0 order-1 lg:order-2"
     />
     <div class="flex flex-col gap-6 order-3">
       <div class="flex gap-2 text-wrap">
-        <h1 class="text-3xl md:text-5xl flex font-aeonik text-center font-bold">
-          Hi, I'm Adwoa
+        <h1 class="text-3xl md:text-5xl flex font-aeonik font-bold">
+          Hi, I'm Adwoa Addo-Brako
         </h1>
-        <div class="flex items-center">
+        <!-- <div class="flex items-center">
           <span class="text-[#00000066] md:text-sm font-bold i-lucide-volume-2"
           ></span>{" "}
           <span class="text-[#00000066] md:text-sm font-bold">Ah-jwah</span>
-        </div>
+        </div> -->
       </div>
 
       <p class="font-aeonik text-base leading-6">
@@ -79,8 +80,8 @@ const featuredProjects = projects.filter((project) => project.featured)
     <Footer class="block lg:hidden order-4" />
     <hr class="border-b w-full border-[#EAEAE9] order-5" />
     <section class="flex flex-col py-4 gap-6 w-full order-6">
-      <h2 class="capitalize text-[#595959]">Featured Projects</h2>
-      <div class="grid grid-cols-4 lg:gap-8.5 gap-2 place-items-center">
+      <h2 class="capitalize text-secondary">Featured Projects</h2>
+      <div class="flex gap-3 flex-wrap justify-center md:justify-start">
         {
           featuredProjects.length > 0 ? (
             featuredProjects.map((project) => {
@@ -100,7 +101,7 @@ const featuredProjects = projects.filter((project) => project.featured)
     </section>
     <hr class="border-b w-full border-[#EAEAE9] order-7" />
     <section class="flex flex-col py-4 gap-6 w-full order-8">
-      <h2 class="capitalize text-[#595959]">Lastest Posts</h2>
+      <h2 class="capitalize text-secondary">Lastest Posts</h2>
       <div class="flex flex-col gap-2">
         {
           allPosts.length > 0 ? (
