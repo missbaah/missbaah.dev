@@ -9,16 +9,16 @@ const { class: className } = Astro.props
 ---
 
 <footer class={clsx(className)}>
-  <p>Find me on</p>
-  <div class="flex gap-3 mt-1.5 text-black text-sm">
+  <p class="text-gray-dark text-sm">Find me on</p>
+  <div class="flex gap-3 mt-1.5 text-black">
+    <a href="mailto:missbaah.brako@gmail.com" class="i-lucide-mail size-5"></a>
     <a
       href="https://www.linkedin.com/in/adwoaaddobrako/"
       target="_blank"
-      class="i-lucide-linkedin text-xl"></a>
+      class="i-ph-linkedin-logo size-5"></a>
     <a
       href="https://github.com/missbaah"
       target="_blank"
-      class="i-lucide-github text-xl"></a>
-    <a href="mailto:missbaah.brako@gmail.com" class="i-lucide-mail text-xl"></a>
+      class="i-ph-github-logo size-5"></a>
   </div>
 </footer>

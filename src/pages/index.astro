@@ -19,6 +19,7 @@ const allNotes = Object.values(
 const time = new Date().toLocaleTimeString([], {
   hour: "2-digit",
   minute: "2-digit",
+  hour12: false,
 })
 
 const greetings = [
@@ -63,29 +64,24 @@ const featuredProjects = projects.filter((project) => project.featured)
         <h1 class="text-3xl md:text-5xl flex font-aeonik font-bold">
           Hi, I'm Adwoa Addo-Brako
         </h1>
-        <!-- <div class="flex items-center">
-          <span class="text-[#00000066] md:text-sm font-bold i-lucide-volume-2"
-          ></span>{" "}
-          <span class="text-[#00000066] md:text-sm font-bold">Ah-jwah</span>
-        </div> -->
       </div>
 
-      <p class="font-aeonik text-base leading-6">
+      <p class="font-aeonik text-base leading-6 text-dark">
         I build interfaces that feel considered, currently at Dexwin Tech,
         working on bringing African products to a world class standard. I also
-        read too much, think alot about the web and solve word searches p.s
+        read too much, think alot about zthe web and solve word searches p.s
         there's one waiting for you ;)
       </p>
     </div>
-    <Footer class="block lg:hidden order-4" />
+    <Footer class="block order-4" />
     <hr class="border-b w-full border-[#EAEAE9] order-5" />
     <section class="flex flex-col py-4 gap-6 w-full order-6">
-      <h2 class="capitalize text-secondary">Featured Projects</h2>
+      <h2 class="capitalize text-gray-light text-sm">Featured Projects</h2>
       <ProjectGrid projects={featuredProjects} client:load />
     </section>
     <hr class="border-b w-full border-[#EAEAE9] order-7" />
     <section class="flex flex-col py-4 gap-6 w-full order-8">
-      <h2 class="capitalize text-secondary">Lastest Posts</h2>
+      <h2 class="capitalize text-gray-light text-sm">Latest Posts</h2>
       <div class="flex flex-col gap-2">
         {
           allPosts.length > 0 ? (
