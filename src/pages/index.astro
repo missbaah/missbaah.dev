@@ -16,13 +16,13 @@ const allNotes = Object.values(
   import.meta.glob("./notes/*.md", { eager: true })
 ).slice(0, MAX_NOTES)
 
-const time = new Date().toLocaleTimeString([], {
+export const time = new Date().toLocaleTimeString([], {
   hour: "2-digit",
   minute: "2-digit",
   hour12: false,
 })
 
-const greetings = [
+export const greetings = [
   {
     before: "12:00",
     label: "Good morning",
@@ -40,7 +40,9 @@ const greetings = [
   },
 ]
 
-const { icon, label } = greetings.find((greeting) => time < greeting.before)!
+export const { icon, label } = greetings.find(
+  (greeting) => time < greeting.before
+)!
 
 // if it is mobile, show the first 3 featured projects, else show all featured projects
 const featuredProjects = projects.filter((project) => project.featured)
@@ -69,7 +71,7 @@ const featuredProjects = projects.filter((project) => project.featured)
       <p class="font-aeonik text-base leading-6 text-dark">
         I build interfaces that feel considered, currently at Dexwin Tech,
         working on bringing African products to a world class standard. I also
-        read too much, think alot about zthe web and solve word searches p.s
+        read too much, think alot about the web and solve word searches p.s
         there's one waiting for you ;)
       </p>
     </div>
@@ -79,7 +81,7 @@ const featuredProjects = projects.filter((project) => project.featured)
       <h2 class="capitalize text-gray-light text-sm">Featured Projects</h2>
       <ProjectGrid projects={featuredProjects} client:load />
     </section>
-    <hr class="border-b w-full border-[#EAEAE9] order-7" />
+    <!-- <hr class="border-b w-full border-[#EAEAE9] order-7" />
     <section class="flex flex-col py-4 gap-6 w-full order-8">
       <h2 class="capitalize text-gray-light text-sm">Latest Posts</h2>
       <div class="flex flex-col gap-2">
@@ -99,6 +101,6 @@ const featuredProjects = projects.filter((project) => project.featured)
           )
         }
       </div>
-    </section>
+    </section> -->
   </div>
 </Layout>

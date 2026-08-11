@@ -1,21 +1,53 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import '../styles/global.css'
-
+import Layout from "../layouts/Layout.astro"
+import "../styles/global.css"
+import { icon, label, time } from "./index.astro"
+import Footer from "../components/Footer.astro"
 ---
 
-<Layout pageTitle='About | missbaah'>
-    <div class="flex items-center flex-col md:flex-row ">
-    <img src="/notionface.png" alt="drawing" width="250" class="items-start md:order-2 order-1">
-    <div class="flex flex-col gap-4 md:order-1 order-2">
- <p class="text-2xl">Adwoa Baah Addo-Brako <span class="text-orange-500 bg-orange-100 rounded-full p-1 text-xs">missbaah</span></p>
-    <p class="md:w-3/4">I'm a software developer who loves to build beautiful spaces in real life and on the internet. I've been a software dev for over 3 years now and I'm constantly honing my skills.</p>
-    <p class="md:w-3/4">"Time is going to pass anyways, why don't spend the time making your life beautiful" - Guiding Philosophy </p>
+<Layout pageTitle="About | missbaah">
+  <div class="flex items-start flex-col gap-6">
+    <div
+      class="text-[#00000066] order-2 md:order-1 flex flex-col gap-1 md:gap-6 md:flex-row md:items-center w-full"
+    >
+      <p class="flex gap-2.5 items-center text-sm">
+        <span class={icon}></span>
+        {label} &#x2022; {time}
+      </p>
+      <span class="text-dark hidden md:block">&#x2022;</span>
+      <div class="flex gap-1 items-center text-sm">
+        <span class="i-ph-book-open-user-duotone"></span>
+        currently reading:<a
+          class="text-blue-500 hover:underline font-bold"
+          href="https://www.goodreads.com/book/show/13588394-the-lean-startup"
+          >The Lean Startup</a
+        >
+      </div>
     </div>
-       
-
+    <img
+      src="/notionface.png"
+      alt="drawing"
+      class="order-1 md:order-2 size-60"
+    />
+    <div class="flex flex-col gap-6 order-3">
+      <h1 class="text-3xl md:text-4xl flex font-aeonik font-bold">
+        Hi, I'm Adwoa Addo-Brako
+      </h1>
+      <p class="font-aeonik text-base leading-6 text-dark">
+        I build interfaces that feel considered, currently at Dexwin Tech,
+        working on bringing African products to a world class standard. I also
+        read too much, think alot about the web and solve word searches p.s
+        there's one waiting for you ;)
+      </p>
+      <div class="flex flex-col gap-2">
+        <p class="italic text-xl leading-6 text-dark">
+          "Time is going to pass anyways, why don't spend the time making your
+          life beautiful"
+        </p>
+        <p class="text-sm leading-6 text-gray-500">- Guiding Philosophy</p>
+      </div>
     </div>
 
-    
-    
+    <Footer class="block order-4" />
+  </div>
 </Layout>
