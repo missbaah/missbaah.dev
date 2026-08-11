@@ -1,4 +1,4 @@
-import { useState, type SetStateAction } from "react"
+import { useState } from "react"
 import Dialog from "./Dialog"
 import type { ProjectCardProps } from "../data/project"
 
@@ -14,16 +14,18 @@ export default function ProjectCard(project: ProjectCardProps) {
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") setOpen(true)
       }}
-      className="group w-full max-w-full lg:max-w-[48%] aspect-18/8 border border-[#ECECEC] rounded-2xl flex items-center justify-center relative overflow-hidden hover:cursor-pointer"
+      className="group w-full aspect-4/3 border border-[#ECECEC] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden hover:cursor-pointer hover:border-[#D9D9D9] transition-colors duration-200"
     >
       <img
         src={project.imgsrc}
         alt={project.title}
-        className="object-cover transition-transform duration-300 ease-out group-hover:-translate-y-2"
+        className="w-10 h-10 rounded-[10px] object-cover transition-transform duration-300 ease-out group-hover:-translate-y-0.5"
       />
-      <div className="absolute bottom-0 left-0 right-0 px-4 pt-8 pb-3 bg-linear-to-t from-white via-white/90 to-transparent opacity-0 translate-y-2 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0">
-        <p className="font-bold text-sm">{project.title}</p>
-        <p className="text-sm text-[#595959]">{project.desc}</p>
+      <div>
+        <p className="font-bold text-sm mb-1 font-aeonik">{project.title}</p>
+        <p className="font-aeonik text-sm text-gray-500 leading-relaxed">
+          {project.desc}
+        </p>
       </div>
       <Dialog project={project} open={open} onOpenChange={setOpen} />
     </div>

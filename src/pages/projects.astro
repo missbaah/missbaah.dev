@@ -3,23 +3,49 @@ import ProjectCard from "../components/ProjectCard.tsx"
 import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
 import "../styles/global.css"
+
+const featuredProjects = projects.filter((project) => project.featured)
+const inProgressProjects = projects.filter(
+  (project) => project.status === "in progress"
+)
 ---
 
 <Layout pageTitle="Projects | missbaah">
-  <div>
-    <p class="text-lg capitalize font-bold">Working On</p>
-    <p class="mb-8">Here are some of the projects I'm currently working on</p>
-    <div class="grid md:grid-cols-2 gap-5">
-      {
-        projects.map((project) => (
-          <ProjectCard
-            client:load
-            title={project.title}
-            description={project.description}
-            imgsrc={project.imgsrc}
-          />
-        ))
-      }
-    </div>
-  </div>
+  <section class="flex flex-col gap-8 mt-10">
+    <p class="text-gray-500 font-aeonik">
+      Here are some of the projects I'm currently working on, and some of the
+      projects I've worked on in the past. <br /> You can also check out my <a
+        class="text-blue-500 hover:underline font-bold"
+        href="https://github.com/missbaah"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GitHub profile
+      </a>
+    </p>
+    <hr class="border-b w-4/5 border-[#EAEAE9]" />
+    <section class="flex flex-col gap-6">
+      <p class="text-xl font-aeonik capitalize font-bold">Live Projects</p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {
+          featuredProjects.map((project) => (
+            <ProjectCard client:load {...project} />
+          ))
+        }
+      </div>
+    </section>
+    <hr class="border-b w-4/5 border-[#EAEAE9]" />
+    <section class="flex flex-col gap-6">
+      <p class="text-xl font-aeonik capitalize font-bold">Working On</p>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        {
+          inProgressProjects.map((project) => (
+            <ProjectCard client:load {...project} />
+          ))
+        }
+      </div>
+    </section>
+  </section>
 </Layout>
