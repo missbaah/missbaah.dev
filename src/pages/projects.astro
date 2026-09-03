@@ -1,13 +1,8 @@
 ---
-import ProjectCard from "../components/ProjectCard.tsx"
 import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
+import ProjectsBoard from "../components/ProjectsBoard.tsx"
 import "../styles/global.css"
-
-const featuredProjects = projects.filter((project) => project.featured)
-const inProgressProjects = projects.filter(
-  (project) => project.status === "in progress"
-)
 ---
 
 <Layout pageTitle="Projects | missbaah">
@@ -24,28 +19,6 @@ const inProgressProjects = projects.filter(
       </a>
     </p>
     <hr class="border-b w-4/5 border-[#EAEAE9]" />
-    <section class="flex flex-col gap-6">
-      <p class="text-xl font-aeonik capitalize font-bold">Live Projects</p>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        {
-          featuredProjects.map((project) => (
-            <ProjectCard client:load {...project} />
-          ))
-        }
-      </div>
-    </section>
-    <hr class="border-b w-4/5 border-[#EAEAE9]" />
-    <section class="flex flex-col gap-6">
-      <p class="text-xl font-aeonik capitalize font-bold">Working On</p>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        {
-          inProgressProjects.map((project) => (
-            <ProjectCard client:load {...project} />
-          ))
-        }
-      </div>
-    </section>
+    <ProjectsBoard projects={projects} client:load />
   </section>
 </Layout>

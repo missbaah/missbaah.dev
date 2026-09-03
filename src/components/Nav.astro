@@ -14,7 +14,7 @@ const navItems = [
 const { pathname } = Astro.url
 ---
 
-<nav class="flex text-[#595959] font-medium w-[85%] md:w-full bg-white">
+<nav class="flex w-full pt-8.5 pb-6">
   <div class="flex md:gap-6 gap-3 justify-between">
     {
       navItems.map((item) => {
@@ -22,9 +22,9 @@ const { pathname } = Astro.url
           <a
             class={clsx(
               {
-                "after:w-2/3 text-black font-bold": item.path === pathname,
+                "after:w-full opacity-100": item.path === pathname,
               },
-              "font-inter relative after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:w-0"
+              "opacity-[0.45] relative after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:w-0"
             )}
             href={item.path}
           >

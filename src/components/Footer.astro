@@ -6,19 +6,28 @@ interface FooterProps {
 }
 
 const { class: className } = Astro.props
+
+const linkClass =
+  "flex items-center gap-2 py-2 px-3.5 border border-black/[0.14] rounded-[20px] hover:border-[#141412] hover:bg-[#f6f5f2] transition duration-150 ease-out hover:underline hover:underline-offset-2"
 ---
 
-<footer class={clsx(className)}>
-  <p class="text-gray-dark text-sm">Find me on</p>
-  <div class="flex gap-3 mt-1.5 text-black">
-    <a href="mailto:missbaah.brako@gmail.com" class="i-lucide-mail size-5"></a>
+<footer class={clsx(className, "flex gap-4 items-baseline flex-wrap")}>
+  <p class="text-black/45 text-xs uppercase">Find me on</p>
+  <div class="flex gap-2.5 text-[#141412] text-sm">
+    <a href="mailto:missbaah.brako@gmail.com" class={linkClass}>
+      <span class="i-lucide-mail size-4"></span> Email
+    </a>
     <a
       href="https://www.linkedin.com/in/adwoaaddobrako/"
       target="_blank"
-      class="i-ph-linkedin-logo size-5"></a>
-    <a
-      href="https://github.com/missbaah"
-      target="_blank"
-      class="i-ph-github-logo size-5"></a>
+      class={linkClass}
+    >
+      <span class="i-ph-linkedin-logo size-4"></span>
+      LinkedIn
+    </a>
+    <a href="https://github.com/missbaah" target="_blank" class={linkClass}>
+      <span class="i-ph-github-logo size-4"></span>
+      Github
+    </a>
   </div>
 </footer>

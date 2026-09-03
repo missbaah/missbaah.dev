@@ -1,53 +1,93 @@
 ---
 import Layout from "../layouts/Layout.astro"
 import "../styles/global.css"
-import { icon, label, time } from "./index.astro"
+import GreetingClock from "../components/GreetingClock.tsx"
+import WordSearch from "../components/WordSearch.tsx"
 import Footer from "../components/Footer.astro"
 ---
 
 <Layout pageTitle="About | missbaah">
-  <div class="flex items-start flex-col mt-10">
+  <div class="flex flex-col gap-8 mt-5">
     <div
-      class="text-[#00000066] order-2 md:order-1 flex flex-col gap-1 md:gap-6 md:flex-row md:items-center w-full"
+      class="text-[#00000066] flex flex-col gap-1 md:gap-5 md:flex-row md:items-center w-full"
     >
-      <p class="flex gap-2.5 items-center text-sm">
-        <span class={icon}></span>
-        {label} &#x2022; {time}
-      </p>
-      <span class="text-dark hidden md:block">&#x2022;</span>
+      <GreetingClock client:load />
+      <span class="hidden md:block">&#47;</span>
       <div class="flex gap-1 items-center text-sm">
-        <span class="i-ph-book-open-user-duotone"></span>
-        currently reading:<a
+        reading <a
           class="text-blue-500 hover:underline font-bold"
           href="https://www.goodreads.com/book/show/13588394-the-lean-startup"
           >The Lean Startup</a
         >
       </div>
     </div>
-    <img
-      src="/notionface.png"
-      alt="drawing"
-      class="order-1 md:order-2 size-60"
-    />
-    <div class="flex flex-col gap-6 order-3">
-      <h1 class="text-3xl md:text-4xl flex font-aeonik font-bold">
-        Hi, I'm Adwoa Addo-Brako
-      </h1>
-      <p class="font-aeonik text-base leading-6 text-dark">
-        I build interfaces that feel considered, currently at Dexwin Tech,
-        working on bringing African products to a world class standard. I also
-        read too much, think alot about the web and solve word searches p.s
-        there's one waiting for you ;)
+
+    <div class="flex flex-col gap-10 mt-9">
+      <div class="flex flex-col md:flex-row gap-6 md:items-center">
+        <h1 class="text-3xl md:text-[42px] w-3/5 flex font-aeonik font-bold">
+          Hi, I'm Adwoa Baah Addo-Brako
+        </h1>
+        <!-- 
+        <img
+          src="/notionface.png"
+          alt="drawing"
+          class="size-48 md:size-28 shrink-0"
+        /> -->
+      </div>
+      <p class="text-[22px] text-[#141412] leading-8 font-aeonik">
+        I build interfaces that feel considered.
       </p>
-      <div class="flex flex-col gap-2">
-        <p class="text-xl leading-6 text-gray-500 w-3/4">
+
+      <div
+        class="flex flex-col md:flex-row gap-7 text-base leading-6 text-[#3a3935]"
+      >
+        <div class="flex flex-col gap-2.5 w-2/3">
+          <span class="uppercase leading-2.5 text-xs text-black/45"
+            >Right now</span
+          >
+          <p class="text-[15.5px] leading-6">
+            At Dexwin Tech, working on bringing African products to a world
+            class standard.
+          </p>
+        </div>
+        <div class="flex flex-col gap-2.5">
+          <span class="uppercase leading-2.5 text-xs text-black/45"
+            >Otherwise</span
+          >
+          <p class="text-[15.5px] leading-6">
+            I read too much, think a lot about the web, and solve word searches.
+            p.s There's one waiting for you below ;)
+          </p>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2 border-l-2 py-0.5 pl-4">
+        <p class="text-xl leading-7 w-3/4 font-aeonik">
           "Time is going to pass anyways, why don't spend the time making your
           life beautiful"
         </p>
-        <p class="text-sm leading-6 text-gray-500">- Guiding Philosophy</p>
+        <p class="text-sm leading-6 text-black/45 lowercase">
+          Guiding Philosophy
+        </p>
       </div>
+      <Footer class="block" />
     </div>
+    <hr class="w-full text-[#EAEAE9]" />
 
-    <Footer class="block order-4" />
+    <section class="flex flex-col md:flex-row gap-10 w-full">
+      <div class="flex flex-col gap-4 md:w-1/3">
+        <p class="text-xs text-black/45 uppercase">The one waiting for you</p>
+        <p class="text-xl">Six words are hiding in here.</p>
+        <p class="text-sm text-black/45">
+          Drag across letters to claim one. Nothing to install, no score to
+          beat.
+        </p>
+        <button
+          class="w-fit py-2.5 px-4.5 rounded-xl bg-[#141412] text-white hover:bg-[#2a2a2a]"
+        >
+          Start Playing
+        </button>
+      </div>
+      <WordSearch client:load />
+    </section>
   </div>
 </Layout>

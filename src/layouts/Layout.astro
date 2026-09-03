@@ -19,10 +19,11 @@ const { pageTitle } = Astro.props
     <Font cssVariable="--font-inter" />
   </head>
   <body>
-    <main class="flex flex-col gap-11 items-start px-4 md:px-[23%] my-14">
+    <main class="flex flex-col items-start px-4 md:px-[23%] my-14">
       <section>
         <Nav />
       </section>
+      <hr class="w-full text-[#EAEAE9]" />
       <section class="">
         <slot />
       </section>

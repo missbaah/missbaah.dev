@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
 import "../styles/global.css"
 import ProjectGrid from "../components/ProjectGrid.tsx"
+import GreetingClock from "../components/GreetingClock.tsx"
 import Footer from "../components/Footer.astro"
 
 const MAX_POSTS = 3
@@ -16,68 +17,36 @@ const allNotes = Object.values(
   import.meta.glob("./notes/*.md", { eager: true })
 ).slice(0, MAX_NOTES)
 
-export const time = new Date().toLocaleTimeString([], {
-  hour: "2-digit",
-  minute: "2-digit",
-  hour12: false,
-})
-
-export const greetings = [
-  {
-    before: "12:00",
-    label: "Good morning",
-    icon: "i-ph-cloud-fill",
-  },
-  {
-    before: "18:00",
-    label: "Good afternoon",
-    icon: "i-ph-cloud-sun-fill",
-  },
-  {
-    before: "24:00",
-    label: "Good evening",
-    icon: "i-ph-cloud-moon-fill",
-  },
-]
-
-export const { icon, label } = greetings.find(
-  (greeting) => time < greeting.before
-)!
-
-// if it is mobile, show the first 3 featured projects, else show all featured projects
+// homepage curation, independent of the Projects page's status grouping
 const featuredProjects = projects.filter((project) => project.featured)
 ---
 
 <Layout>
   <div class="grid gap-6 mt-10">
-    <div class="text-[#00000066] order-2 lg:order-1">
-      <p class="flex gap-2.5 items-center text-sm">
-        <span class={icon}></span>
-        {label} &#x2022; {time}
-      </p>
+    <div class="text-[#00000066]">
+      <GreetingClock client:load />
     </div>
-    <img
-      src="/notionface.png"
-      alt="avatar"
-      class="size-52 mx-auto lg:mx-0 md:mx-0 order-1 lg:order-2"
-    />
-    <div class="flex flex-col gap-6 order-3">
-      <div class="flex gap-2 text-wrap">
+    <div class="flex flex-col md:flex-row gap-6 md:items-start">
+      <img
+        src="/notionface.png"
+        alt="avatar"
+        class="size-24 md:size-28 shrink-0 mx-auto md:mx-0"
+      />
+      <div class="flex flex-col gap-6">
         <h1 class="text-3xl md:text-5xl flex font-aeonik font-bold">
           Hi, I'm Adwoa Addo-Brako
         </h1>
+        <p class="font-aeonik text-base leading-6 text-dark">
+          I build interfaces that feel considered, currently at Dexwin Tech,
+          working on bringing African products to a world class standard. I also
+          read too much, think a lot about the web and solve word searches p.s
+          there's one waiting for you ;)
+        </p>
       </div>
-
-      <p class="font-aeonik text-base leading-6 text-dark">
-        I build interfaces that feel considered, currently at Dexwin Tech,
-        working on bringing African products to a world class standard. I also
-        read too much, think alot about the web and solve word searches p.s
-        there's one waiting for you ;)
-      </p>
     </div>
-    <Footer class="block order-4" />
-    <hr class="border-b w-full border-[#EAEAE9] order-5" />
-    <section class="flex flex-col py-4 gap-6 w-full order-6">
+    <Footer class="block" />
+    <hr class="border-b w-full border-[#EAEAE9]" />
+    <section class="flex flex-col py-4 gap-6 w-full">
       <h2 class="capitalize text-gray-light text-sm">Featured Projects</h2>
       <ProjectGrid projects={featuredProjects} client:load />
     </section>

@@ -9,6 +9,8 @@ export default {
         "gray-dark": "#595959",
         dark: "#212223",
         "gray-light": "#737373",
+        light: "#EAEAE9",
+        primary: "#141412",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
