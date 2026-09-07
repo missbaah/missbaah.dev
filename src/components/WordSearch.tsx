@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 
 // Placeholder word list — final words TBD.
-const WORDS = ["ADWOA", "CRAFT", "LEAN", "WEB", "DEXWIN", "SEARCH"]
+const WORDS = ["ADWOA", "CRAFT", "LEAN", "WEB", "DEXWIN"]
 const STORAGE_KEY = "missbaah-word-search-found"
 const SEED = 42
 
@@ -155,7 +155,7 @@ function Puzzle({
   return (
     <div
       className="grid gap-1 mx-auto w-full max-w-xs md:max-w-sm touch-none select-none"
-      style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
+      style={{ gridTemplateColumns: `repeat(${size}, 48px)` }}
       onPointerDown={(e) => {
         const target = (e.target as HTMLElement).closest(
           "[data-row]"
@@ -195,10 +195,10 @@ function Puzzle({
               data-col={c}
               className={`aspect-square flex items-center justify-center text-xs md:text-sm font-aeonik rounded-md transition-colors ${
                 isFound
-                  ? "bg-primary text-white"
+                  ? "bg-pink text-pink-ink"
                   : isSelected
-                    ? "bg-secondary/20"
-                    : "bg-[#F7F7F6]"
+                    ? "bg-pink text-pink-ink"
+                    : "bg-ink text-[#F7F4EE]"
               }`}
             >
               {letter}
@@ -234,30 +234,33 @@ export default function WordSearch() {
   const allFound = found.size === WORDS.length
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 md:gap-8">
-      <div className="md:hidden">
-        <Puzzle size={8} found={found} onFound={handleFound} />
-      </div>
-      <div className="hidden md:block md:flex-1">
-        <Puzzle size={8} found={found} onFound={handleFound} />
-      </div>
-      <div className="flex md:flex-col flex-wrap gap-x-4 gap-y-1 justify-center text-sm font-aeonik">
-        {WORDS.map((word) => (
-          <span
-            key={word}
-            className={
-              found.has(word) ? "line-through text-gray-light" : "text-dark"
-            }
-          >
-            {word}
-          </span>
-        ))}
-      </div>
-      {/* {allFound && (
-        <p className="text-center text-sm text-gray-light font-aeonik">
-          found them all ✨
+    <div className="flex flex-col md:flex-row gap-8 md:justify-between w-full">
+      <div className="flex flex-col gap-4 md:w-1/3 flex-1">
+        <p className="text-xs text-ink-soft uppercase">
+          The one waiting for you
         </p>
-      )} */}
+        <p className="text-xl">Six words are hiding in here.</p>
+        <div className="flex flex-wrap gap-x-2 gap-y-4 justify-start text-xs font-aeonik">
+          {WORDS.map((word) => (
+            <span
+              key={word}
+              className={
+                found.has(word)
+                  ? "bg-pink text-pink-ink text-center py-2 px-3.5 rounded-full font-semibold"
+                  : "text-ink-soft py-2 px-3.5 border border-line-strong rounded-full"
+              }
+            >
+              {word}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div className="md:hidden">
+        <Puzzle size={5} found={found} onFound={handleFound} />
+      </div>
+      <div className="hidden md:block w-full max-w-sm ">
+        <Puzzle size={6} found={found} onFound={handleFound} />
+      </div>
     </div>
   )
 }
