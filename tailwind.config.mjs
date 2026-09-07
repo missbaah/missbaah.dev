@@ -11,6 +11,16 @@ export default {
         "gray-light": "#737373",
         light: "#EAEAE9",
         primary: "#141412",
+        "text-color": "#1f1e1a",
+        "text-color-light": "#5C574E",
+        "text-color-lighter": "#6F6A5F",
+        hairline: "#e3ded3",
+        "pink-fill": "#efc7ce",
+        links: "#a3324f",
+        "pink-text": "#43222a",
+      },
+      backgroundColor: {
+        cream: "#f7f4ee",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],

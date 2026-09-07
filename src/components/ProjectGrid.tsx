@@ -8,7 +8,7 @@ export default function ProjectGrid({
   projects: ProjectCardProps[]
 }) {
   return (
-    <Theme data-is-root-theme="false">
+    <Theme data-is-root-theme="false" className="bg-transparent!">
       <div className="grid md:grid-cols-3 gap-6 justify-center md:justify-start">
         {projects.length > 0 ? (
           projects.map((project, index) => {

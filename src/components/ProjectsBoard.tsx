@@ -31,8 +31,8 @@ export default function ProjectsBoard({
   const showWip = filter === "all" || filter === "in progress"
 
   return (
-    <Theme data-is-root-theme="false">
-      <section className="flex flex-col gap-6 mt-10">
+    <Theme data-is-root-theme="false" className="bg-transparent!">
+      <section className="flex flex-col gap-6 mt-10 ">
         <section className="flex flex-col md:flex-row gap-4 items-end">
           <div className="flex flex-col gap-4">
             <h1 className="text-3xl md:text-4xl font-aeonik font-bold leading-10">

@@ -3,6 +3,7 @@
 import Nav from "../components/Nav.astro"
 import { Font } from "astro:assets"
 import "@radix-ui/themes/styles.css"
+import "../styles/global.css"
 
 const { pageTitle } = Astro.props
 ---
@@ -18,12 +19,12 @@ const { pageTitle } = Astro.props
     <Font cssVariable="--font-aeonik-pro" />
     <Font cssVariable="--font-inter" />
   </head>
-  <body class="pb-9">
-    <main class="flex flex-col items-start px-4 md:px-[20%] md:my-8">
+  <body class="min-h-screen bg-cream text-text-color">
+    <main class="flex flex-col h-full items-start px-4 md:px-[20%] md:py-8">
       <section>
         <Nav />
       </section>
-      <hr class="w-full text-[#EAEAE9]" />
+      <hr class="w-full text-hairline" />
       <section class="">
         <slot />
       </section>

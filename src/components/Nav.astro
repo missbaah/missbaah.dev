@@ -22,7 +22,7 @@ const { pathname } = Astro.url
           <a
             class={clsx(
               {
-                "after:w-full opacity-100": item.path === pathname,
+                "after:w-full": item.path === pathname,
               },
               "opacity-[0.45] relative after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:w-0"
             )}
@@ -34,6 +34,4 @@ const { pathname } = Astro.url
       })
     }
   </div>
-
-  <!-- <Footer class="hidden lg:block" /> -->
 </nav>
