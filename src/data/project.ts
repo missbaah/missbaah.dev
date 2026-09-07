@@ -65,15 +65,15 @@ export const projects: ProjectCardProps[] = [
     githubLink: "www.github.com",
     siteLink: "www.github.com",
   },
-  {
-    title: "Notely",
-    desc: "A minimalist note-taking app with markdown support.",
-    imgsrc: "/image1.png",
-    featured: true,
-    status: "done",
-    about:
-      "Notely is a distraction-free note-taking app supporting markdown formatting, quick search, and folder organization for keeping personal and work notes separate.",
-    githubLink: "www.github.com",
-    siteLink: "www.github.com",
-  },
+  // {
+  //   title: "Notely",
+  //   desc: "A minimalist note-taking app with markdown support.",
+  //   imgsrc: "/image1.png",
+  //   featured: true,
+  //   status: "done",
+  //   about:
+  //     "Notely is a distraction-free note-taking app supporting markdown formatting, quick search, and folder organization for keeping personal and work notes separate.",
+  //   githubLink: "www.github.com",
+  //   siteLink: "www.github.com",
+  // },
 ]

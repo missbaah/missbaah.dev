@@ -21,7 +21,8 @@ export default function ProjectCard(project: ProjectCardProps) {
         alt={project.title}
         className="w-10 h-10 rounded-[10px] object-cover transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-110 group-focus-visible:-translate-y-0.5 group-focus-visible:scale-110"
       />
-      <div>
+
+      <div className="flex flex-col gap-2 border-t border-[#ECECEC] pt-3">
         <div className="flex items-center gap-1.5 mb-1">
           <p className="font-bold text-sm font-aeonik">{project.title}</p>
           <span className="inline-flex items-center gap-1">
