@@ -20,7 +20,12 @@ function mulberry32(seed: number) {
   }
 }
 
-function cellsFor(row: number, col: number, dir: Direction, length: number): Cell[] {
+function cellsFor(
+  row: number,
+  col: number,
+  dir: Direction,
+  length: number
+): Cell[] {
   return Array.from({ length }, (_, i) =>
     dir === "right" ? { row, col: col + i } : { row: row + i, col }
   )
@@ -80,11 +85,19 @@ function sameLine(a: Cell, b: Cell) {
 
 function cellsBetween(start: Cell, end: Cell): Cell[] {
   if (start.row === end.row) {
-    const [from, to] = start.col <= end.col ? [start.col, end.col] : [end.col, start.col]
-    return Array.from({ length: to - from + 1 }, (_, i) => ({ row: start.row, col: from + i }))
+    const [from, to] =
+      start.col <= end.col ? [start.col, end.col] : [end.col, start.col]
+    return Array.from({ length: to - from + 1 }, (_, i) => ({
+      row: start.row,
+      col: from + i,
+    }))
   }
-  const [from, to] = start.row <= end.row ? [start.row, end.row] : [end.row, start.row]
-  return Array.from({ length: to - from + 1 }, (_, i) => ({ row: from + i, col: start.col }))
+  const [from, to] =
+    start.row <= end.row ? [start.row, end.row] : [end.row, start.row]
+  return Array.from({ length: to - from + 1 }, (_, i) => ({
+    row: from + i,
+    col: start.col,
+  }))
 }
 
 function matchesWord(selected: Cell[], placement: Placement) {
@@ -144,7 +157,9 @@ function Puzzle({
       className="grid gap-1 mx-auto w-full max-w-xs md:max-w-sm touch-none select-none"
       style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
       onPointerDown={(e) => {
-        const target = (e.target as HTMLElement).closest("[data-row]") as HTMLElement | null
+        const target = (e.target as HTMLElement).closest(
+          "[data-row]"
+        ) as HTMLElement | null
         if (!target) return
         const row = Number(target.dataset.row)
         const col = Number(target.dataset.col)
@@ -154,10 +169,16 @@ function Puzzle({
       }}
       onPointerMove={(e) => {
         if (!draggingRef.current) return
-        const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null
+        const el = document.elementFromPoint(
+          e.clientX,
+          e.clientY
+        ) as HTMLElement | null
         const target = el?.closest("[data-row]") as HTMLElement | null
         if (!target) return
-        setDragEnd({ row: Number(target.dataset.row), col: Number(target.dataset.col) })
+        setDragEnd({
+          row: Number(target.dataset.row),
+          col: Number(target.dataset.col),
+        })
       }}
       onPointerUp={finishSelection}
       onPointerLeave={() => draggingRef.current && finishSelection()}
@@ -213,23 +234,30 @@ export default function WordSearch() {
   const allFound = found.size === WORDS.length
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col md:flex-row gap-4 md:gap-8">
       <div className="md:hidden">
         <Puzzle size={8} found={found} onFound={handleFound} />
       </div>
-      <div className="hidden md:block">
-        <Puzzle size={10} found={found} onFound={handleFound} />
+      <div className="hidden md:block md:flex-1">
+        <Puzzle size={8} found={found} onFound={handleFound} />
       </div>
-      <div className="flex flex-wrap gap-x-4 gap-y-1 justify-center text-sm font-aeonik">
+      <div className="flex md:flex-col flex-wrap gap-x-4 gap-y-1 justify-center text-sm font-aeonik">
         {WORDS.map((word) => (
-          <span key={word} className={found.has(word) ? "line-through text-gray-light" : "text-dark"}>
+          <span
+            key={word}
+            className={
+              found.has(word) ? "line-through text-gray-light" : "text-dark"
+            }
+          >
             {word}
           </span>
         ))}
       </div>
-      {allFound && (
-        <p className="text-center text-sm text-gray-light font-aeonik">found them all ✨</p>
-      )}
+      {/* {allFound && (
+        <p className="text-center text-sm text-gray-light font-aeonik">
+          found them all ✨
+        </p>
+      )} */}
     </div>
   )
 }
