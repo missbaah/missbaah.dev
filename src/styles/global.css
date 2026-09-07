@@ -2,14 +2,34 @@
 @config "../../tailwind.config.mjs";
 
 :root {
-  --bg-cream: #fdfbf7;
-  --text-color: #1f1e1a;
-  --font-inter: "Inter", sans-serif;
-  --font-aeonik-pro: "Aeonik Pro", sans-serif;
+  --cream-page: #f7f4ee; /* page ground            */
+  --cream-card: #fdfbf7; /* cards, dialogs         */
+  --cream-sunken: #f1ece1; /* inset blocks, wells    */
+
+  --ink: #1f1e1a; /* headings, primary btn  */
+  --ink-muted: #5c574e; /* body copy              */
+  --ink-soft: #6f6a5f; /* labels, inactive nav   */
+
+  --line: #e3ded3; /* card border, rules     */
+  --line-soft: #ece7dc; /* divider inside a card  */
+  --line-strong: #ded8cb; /* outlined pill border   */
+  --separator: #cfc8ba; /* the "/" glyph          */
+
+  --pink: #efc7ce; /* selected fill          */
+  --pink-strong: #dc93a1; /* active mark, 3px       */
+  --pink-ink: #43222a; /* text on --pink         */
+  --pink-link: #a3324f; /* inline links           */
+  --pink-link-hover: #7f2440;
+
+  --status-done: #3f9153;
+  --status-wip: #b06f00;
+
+  --radius-card: 12px;
+  --radius-tile: 9px;
+  --radius-pill: 999px;
 }
 
 body {
-  font-family: var(--font-inter), sans-serif;
-  background-color: var(--bg-cream);
-  color: var(--text-color);
+  background-color: var(--cream-page);
+  color: var(--ink);
 }

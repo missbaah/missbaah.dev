@@ -22,54 +22,37 @@ const featuredProjects = projects.filter((project) => project.featured)
 ---
 
 <Layout>
-  <div class="grid gap-6 mt-10">
-    <div class="text-[#00000066]">
+  <div class="grid gap-6 mt-6">
+    <div class="text-ink-soft">
       <GreetingClock client:load />
     </div>
-    <div class="flex flex-col md:flex-row gap-6 md:items-start">
+    <div class="flex flex-col md:flex-row gap-10 md:items-start">
+      <div class="flex flex-col gap-6 w-3/4 font-aeonik">
+        <h1 class="text-3xl md:text-6xl flex font-bold">
+          Adwoa Baah Addo-Brako
+        </h1>
+        <p class="text-2xl leading-8">
+          I build interfaces that feel considered
+        </p>
+        <p class="text-base leading-7 text-ink-soft w-fit">
+          At Dexwin Tech, working on bringing African products to a world class
+          standard. I also read too much, think a lot about the web and solve
+          word searches p.s there's one waiting for you ;)
+        </p>
+      </div>
       <img
         src="/notionface.png"
         alt="avatar"
-        class="size-24 md:size-28 shrink-0 mx-auto md:mx-0"
+        class="size-24 md:size-44 shrink-0 mx-auto md:mx-0"
       />
-      <div class="flex flex-col gap-6">
-        <h1 class="text-3xl md:text-5xl flex font-aeonik font-bold">
-          Hi, I'm Adwoa Addo-Brako
-        </h1>
-        <p class="font-aeonik text-base leading-6 text-dark">
-          I build interfaces that feel considered, currently at Dexwin Tech,
-          working on bringing African products to a world class standard. I also
-          read too much, think a lot about the web and solve word searches p.s
-          there's one waiting for you ;)
-        </p>
-      </div>
     </div>
-    <Footer class="block" />
+
     <hr class="border-b w-full border-[#EAEAE9]" />
     <section class="flex flex-col py-4 gap-6 w-full">
       <h2 class="capitalize text-gray-light text-sm">Featured Projects</h2>
       <ProjectGrid projects={featuredProjects} client:load />
     </section>
-    <!-- <hr class="border-b w-full border-[#EAEAE9] order-7" />
-    <section class="flex flex-col py-4 gap-6 w-full order-8">
-      <h2 class="capitalize text-gray-light text-sm">Latest Posts</h2>
-      <div class="flex flex-col gap-2">
-        {
-          allPosts.length > 0 ? (
-            allPosts.slice(0, MAX_POSTS).map((post: any) => {
-              return (
-                <BlogPost
-                  href={post.url}
-                  title={post.frontmatter.title}
-                  date={post.frontmatter.pubDate}
-                />
-              )
-            })
-          ) : (
-            <code> // No featured projects yet</code>
-          )
-        }
-      </div>
-    </section> -->
+    <hr class="w-full text-line" />
+    <Footer class="block" />
   </div>
 </Layout>

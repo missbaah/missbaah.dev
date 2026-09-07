@@ -38,12 +38,12 @@ export default function ProjectsBoard({
             <h1 className="text-3xl md:text-4xl font-aeonik font-bold leading-10">
               Projects
             </h1>
-            <p className="text-black/45 leading-7">
+            <p className="text-ink-soft leading-7">
               Here are some of the projects I'm currently working on, and some
               of the projects I've worked on in the past. You can also check out
               my{" "}
               <a
-                className="text-blue-500 hover:underline"
+                className="text-pink-link hover:text-pink-link-hover transition-colors"
                 href="https://github.com/missbaah"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -61,8 +61,8 @@ export default function ProjectsBoard({
                 onClick={() => setFilter(tab.value)}
                 className={`text-xs w-fit font-aeonik px-3.5 py-2 rounded-full border transition-colors ${
                   filter === tab.value
-                    ? "bg-primary text-white border-primary"
-                    : "border-[#ECECEC] text-gray-light hover:border-[#D9D9D9]"
+                    ? "bg-pink-strong text-pink-ink border-none font-bold"
+                    : "border-line-strong text-ink-soft "
                 }`}
               >
                 {tab.label}
@@ -71,13 +71,13 @@ export default function ProjectsBoard({
           </div>
         </section>
 
-        <hr className="w-full text-[#EAEAE9]" />
+        <hr className="w-full text-line" />
         <div className="flex flex-col gap-8">
           {showDone && (
             <section className="flex flex-col gap-6">
               <p className="text-xl font-aeonik capitalize font-bold">
                 Live{"  "}
-                <span className="text-black/45 text-xs font-normal">
+                <span className="text-ink-soft text-xs font-normal">
                   {String(done.length).padStart(2, "0")}
                 </span>
               </p>
@@ -93,7 +93,7 @@ export default function ProjectsBoard({
             <section className="flex flex-col gap-6">
               <p className="text-xl font-aeonik capitalize font-bold">
                 Working on{"  "}
-                <span className="text-black/45 text-xs font-normal">
+                <span className="text-ink-soft text-xs font-normal">
                   {String(wip.length).padStart(2, "0")}
                 </span>
               </p>

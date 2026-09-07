@@ -22,9 +22,10 @@ const { pathname } = Astro.url
           <a
             class={clsx(
               {
-                "after:w-full": item.path === pathname,
+                "underline underline-offset-8 decoration-pink-strong text-ink decoration-[3px] font-bold":
+                  item.path === pathname,
               },
-              "opacity-[0.45] relative after:absolute after:bottom-0 after:left-0 after:h-px after:bg-black after:w-0"
+              "text-ink-soft text-lg"
             )}
             href={item.path}
           >
