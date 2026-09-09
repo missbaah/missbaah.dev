@@ -14,15 +14,15 @@ const navItems = [
 const { pathname } = Astro.url
 ---
 
-<nav class="flex w-full pt-8.5 pb-6">
-  <div class="flex md:gap-6 gap-3 justify-between">
+<nav class="flex w-full md:pt-8.5 md:pb-6 p-5">
+  <div class="flex md:gap-8 gap-6 justify-between">
     {
       navItems.map((item) => {
         return (
           <a
             class={clsx(
               {
-                "underline underline-offset-8 decoration-pink-strong text-ink decoration-[3px] font-bold":
+                "underline underline-offset-[6px] decoration-pink-strong text-ink decoration-2 md:decoration-[3px] font-bold":
                   item.path === pathname,
               },
               "text-ink-soft md:text-lg"
