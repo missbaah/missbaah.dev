@@ -1,7 +1,6 @@
 ---
 //imports
 import clsx from "clsx"
-import Footer from "./Footer.astro"
 
 // js
 const navItems = [
@@ -11,7 +10,8 @@ const navItems = [
   // { name: "Notes", path: "/notes" },
   { name: "About", path: "/about" },
 ]
-const { pathname } = Astro.url
+// Strip the trailing slash so "/projects/" in the built site matches "/projects"
+const pathname = Astro.url.pathname.replace(/(.)\/$/, "$1")
 ---
 
 <nav class="flex w-full md:pt-8.5 md:pb-6 p-5">
@@ -21,11 +21,10 @@ const { pathname } = Astro.url
         return (
           <a
             class={clsx(
-              {
-                "underline underline-offset-[6px] decoration-pink-strong text-ink decoration-2 md:decoration-[3px] font-bold":
-                  item.path === pathname,
-              },
-              "text-ink-soft md:text-lg"
+              item.path === pathname
+                ? "underline underline-offset-[6px] decoration-pink-strong text-ink decoration-2 md:decoration-[3px] font-bold"
+                : "text-ink-soft",
+              "md:text-lg"
             )}
             href={item.path}
           >

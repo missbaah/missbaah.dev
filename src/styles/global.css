@@ -33,3 +33,11 @@ body {
   background-color: var(--cream-page);
   color: var(--ink);
 }
+
+/* Project dialog: bottom sheet on mobile, centred modal from sm up */
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes sheet-down { to { transform: translateY(100%); } }
+@keyframes dialog-in { from { opacity: 0; transform: scale(0.96); } }
+@keyframes dialog-out { to { opacity: 0; transform: scale(0.96); } }
