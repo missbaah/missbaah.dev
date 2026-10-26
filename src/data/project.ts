@@ -1,7 +1,7 @@
 export interface ProjectCardProps {
   title: string
   desc: string
-  imgsrc: string
+  imgsrc?: string
   screenshot?: string
   about: string
   featured: boolean
@@ -14,7 +14,6 @@ export const projects: ProjectCardProps[] = [
   {
     title: "MindConnect",
     desc: "Find a therapist in Ghana without having to ask around.",
-    imgsrc: "/image1.png",
     featured: true,
     status: "in progress",
     about:

@@ -1,11 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 
-// Placeholder word list — final words TBD.
-const WORDS = ["ADWOA", "CRAFT", "LEAN", "WEB", "DEXWIN"]
+// One set per round; the 🔄 button cycles through them. Keep words to 6
+// letters or fewer so every set fits the same grid.
+const WORD_SETS = [
+  ["ADWOA", "CRAFT", "LEAN", "WEB", "DEXWIN"],
+  ["BOOKS", "TEA", "OBSIDIAN", "WORDS", "IDEAS"],
+  ["ACCRA", "KENTE", "JOLLOF", "TWI", "AKWABA"],
+  ["REACT", "ASTRO", "CSS", "DEPLOY", "PIXEL"],
+]
 const STORAGE_KEY = "missbaah-word-search-found"
 const SEED = 42
 // Fits the longest word; the grid only places words right or down
-const SIZE = Math.max(...WORDS.map((w) => w.length))
+const SIZE = Math.max(...WORD_SETS.flat().map((w) => w.length))
 
 type Direction = "right" | "down"
 type Cell = { row: number; col: number }
@@ -33,6 +39,35 @@ function cellsFor(
   )
 }
 
+function shuffle<T>(items: T[], rand: () => number): T[] {
+  const out = [...items]
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1))
+    ;[out[i], out[j]] = [out[j], out[i]]
+  }
+  return out
+}
+
+// How crowded a spot is: placed letters touching the word, with crossings
+// weighted heavily so words spread out instead of stacking up
+function crowding(cells: Cell[], letters: string[][]): number {
+  const own = new Set(cells.map(cellKey))
+  const touching = new Set<string>()
+  let crossings = 0
+  for (const c of cells) {
+    if (letters[c.row][c.col]) crossings++
+    for (let dr = -1; dr <= 1; dr++) {
+      for (let dc = -1; dc <= 1; dc++) {
+        const n = { row: c.row + dr, col: c.col + dc }
+        const key = cellKey(n)
+        if (own.has(key) || !letters[n.row]?.[n.col]) continue
+        touching.add(key)
+      }
+    }
+  }
+  return crossings * 10 + touching.size
+}
+
 // Deterministic placement: same seed + size always produces the same puzzle.
 function buildGrid(size: number, words: string[], seed: number): Grid {
   const letters: string[][] = Array.from({ length: size }, () =>
@@ -41,11 +76,14 @@ function buildGrid(size: number, words: string[], seed: number): Grid {
   const placements: Placement[] = []
   const rand = mulberry32(seed)
   const sorted = [...words].sort((a, b) => b.length - a.length)
+  // Nudges each word toward the less-used direction so the grid mixes
+  // across and down instead of striping
+  const dirCount: Record<Direction, number> = { right: 0, down: 0 }
 
   for (const word of sorted) {
-    let placed = false
-    for (let row = 0; row < size && !placed; row++) {
-      for (let col = 0; col < size && !placed; col++) {
+    const candidates: { cells: Cell[]; dir: Direction }[] = []
+    for (let row = 0; row < size; row++) {
+      for (let col = 0; col < size; col++) {
         for (const dir of ["right", "down"] as Direction[]) {
           const cells = cellsFor(row, col, dir, word.length)
           if (!cells.every((c) => c.row < size && c.col < size)) continue
@@ -53,17 +91,27 @@ function buildGrid(size: number, words: string[], seed: number): Grid {
             const existing = letters[c.row][c.col]
             return !existing || existing === word[i]
           })
-          if (fits) {
-            cells.forEach((c, i) => {
-              letters[c.row][c.col] = word[i]
-            })
-            placements.push({ word, cells })
-            placed = true
-            break
-          }
+          if (fits) candidates.push({ cells, dir })
         }
       }
     }
+    // Shuffle first so ties between equally roomy spots break randomly
+    let best: (typeof candidates)[number] | undefined
+    let bestScore = Infinity
+    for (const candidate of shuffle(candidates, rand)) {
+      const score =
+        crowding(candidate.cells, letters) + dirCount[candidate.dir] * 2
+      if (score < bestScore) {
+        best = candidate
+        bestScore = score
+      }
+    }
+    if (!best) continue
+    best.cells.forEach((c, i) => {
+      letters[c.row][c.col] = word[i]
+    })
+    dirCount[best.dir]++
+    placements.push({ word, cells: best.cells })
   }
 
   for (let row = 0; row < size; row++) {
@@ -117,14 +165,20 @@ function matchesWord(selected: Cell[], placement: Placement) {
 
 function Puzzle({
   size,
+  words,
+  seed,
   found,
   onFound,
+  onStart,
 }: {
   size: number
+  words: string[]
+  seed: number
   found: Set<string>
   onFound: (word: string) => void
+  onStart: () => void
 }) {
-  const grid = useMemo(() => buildGrid(size, WORDS, SEED), [size])
+  const grid = useMemo(() => buildGrid(size, words, seed), [size, words, seed])
   const [dragStart, setDragStart] = useState<Cell | null>(null)
   const [dragEnd, setDragEnd] = useState<Cell | null>(null)
   // Refs mirror the drag so pointerup sees the latest cell even if a fast
@@ -191,6 +245,7 @@ function Puzzle({
         // Keep receiving moves and the final pointerup even if the finger
         // slides off the grid
         e.currentTarget.setPointerCapture(e.pointerId)
+        onStart()
         startRef.current = cell
         endRef.current = cell
         setDragStart(cell)
@@ -233,43 +288,125 @@ function Puzzle({
   )
 }
 
+function formatTime(ms: number) {
+  const seconds = Math.round(ms / 1000)
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`
+}
+
+// ?puzzle=N in the URL is 1-based, so shared links read naturally
+function puzzleFromUrl(): number | null {
+  const n = Number(new URLSearchParams(window.location.search).get("puzzle"))
+  return Number.isInteger(n) && WORD_SETS[n - 1] ? n - 1 : null
+}
+
+function save(setIndex: number, found: Set<string>) {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ set: setIndex, found: [...found] })
+    )
+  } catch {}
+}
+
 export default function WordSearch() {
+  const [setIndex, setSetIndex] = useState(0)
   const [found, setFound] = useState<Set<string>>(new Set())
+  // The clock starts on the first drag and isn't saved, so a reload restarts
+  // it; a round finished without a start (restored from a save) has no time
+  const [startedAt, setStartedAt] = useState<number | null>(null)
+  const [elapsed, setElapsed] = useState<number | null>(null)
+  const [copied, setCopied] = useState(false)
+  const words = WORD_SETS[setIndex]
 
   useEffect(() => {
+    let stored: { set: number; found: string[] } | string[] | null = null
     try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) setFound(new Set(JSON.parse(stored)))
+      stored = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null")
     } catch {}
+    // Older saves were a bare array of found words from the first set
+    const savedSet = Array.isArray(stored) ? 0 : stored?.set
+    const savedFound = Array.isArray(stored) ? stored : (stored?.found ?? [])
+    // A shared link wins over the save, keeping progress only if it's the
+    // same puzzle
+    const shared = puzzleFromUrl()
+    const target = shared ?? savedSet
+    if (target === undefined || !WORD_SETS[target]) return
+    setSetIndex(target)
+    setFound(new Set(target === savedSet ? savedFound : []))
   }, [])
 
-  const handleFound = (word: string) => {
-    setFound((prev) => {
-      const next = new Set(prev)
-      next.add(word)
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]))
-      } catch {}
-      return next
-    })
+  const allFound = words.every((w) => found.has(w))
+
+  const handleStart = () => {
+    if (startedAt === null && !allFound) setStartedAt(Date.now())
   }
 
-  const allFound = found.size === WORDS.length
+  const handleFound = (word: string) => {
+    const next = new Set(found)
+    next.add(word)
+    setFound(next)
+    save(setIndex, next)
+    if (startedAt !== null && words.every((w) => next.has(w))) {
+      setElapsed(Date.now() - startedAt)
+    }
+  }
+
+  const nextSet = () => {
+    const next = (setIndex + 1) % WORD_SETS.length
+    setSetIndex(next)
+    setFound(new Set())
+    setStartedAt(null)
+    setElapsed(null)
+    setCopied(false)
+    save(next, new Set())
+  }
+
+  const share = async () => {
+    const url = `${window.location.origin}/about/?puzzle=${setIndex + 1}#word-search`
+    const text =
+      elapsed !== null
+        ? `I found all ${words.length} words in ${formatTime(elapsed)} 🔎 Can you beat me?`
+        : `I found all ${words.length} words 🔎 Can you find them?`
+    if (navigator.share) {
+      try {
+        await navigator.share({ text, url })
+      } catch {}
+      return
+    }
+    try {
+      await navigator.clipboard.writeText(`${text} ${url}`)
+      setCopied(true)
+    } catch {}
+  }
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 md:justify-between w-full">
-      <div className="flex flex-col gap-4 md:w-1/3 flex-1">
-        <p className="text-xs text-ink-soft uppercase">
+    <div
+      id="word-search"
+      className="flex flex-col lg:flex-row gap-8 lg:justify-between w-full scroll-mt-6"
+    >
+      <div className="flex flex-col gap-4 lg:w-1/3 flex-1">
+        <p className="font-hand text-lg text-ink-soft">
           The one waiting for you
         </p>
-        <p className="text-xl">{WORDS.length} words are hiding in here.</p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-xl">{words.length} words are hiding in here.</p>
+          <button
+            type="button"
+            onClick={nextSet}
+            aria-label="Try a different set of words"
+            title="Try a different set of words"
+            className="shrink-0 size-9 rounded-full border border-line-strong flex items-center justify-center text-base cursor-pointer transition-transform hover:rotate-180 duration-300"
+          >
+            🔄
+          </button>
+        </div>
         <p className="text-sm leading-6 text-ink-muted">
           Press on the first letter of a word and drag across to the last, then
           let go. Words run left to right or top to bottom, and you can drag
           them backwards too. Found words turn pink.
         </p>
         <div className="flex flex-wrap gap-x-2 gap-y-4 justify-start text-xs font-aeonik">
-          {WORDS.map((word) => (
+          {words.map((word) => (
             <span
               key={word}
               className={
@@ -283,8 +420,50 @@ export default function WordSearch() {
           ))}
         </div>
       </div>
-      <div className="w-full md:max-w-sm">
-        <Puzzle size={SIZE} found={found} onFound={handleFound} />
+      <div className="relative w-full max-w-sm mx-auto lg:mx-0 lg:self-start">
+        <Puzzle
+          key={setIndex}
+          size={SIZE}
+          words={words}
+          seed={SEED + setIndex}
+          found={found}
+          onFound={handleFound}
+          onStart={handleStart}
+        />
+        {allFound && (
+          <div
+            role="status"
+            className="absolute inset-0 flex items-center justify-center p-4 bg-cream-page/70 backdrop-blur-[2px] rounded-md animate-[fade-in_250ms_ease-out]"
+          >
+            <div className="bg-pink text-pink-ink rounded-card px-6 py-5 text-center shadow-lg flex flex-col items-center gap-3 animate-[dialog-in_300ms_ease-out]">
+              <p className="text-3xl">🎉</p>
+              <p className="font-aeonik font-bold text-lg">
+                You found them all!
+              </p>
+              {elapsed !== null && (
+                <p className="font-aeonik text-sm -mt-2">
+                  in {formatTime(elapsed)}
+                </p>
+              )}
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={share}
+                  className="rounded-pill bg-ink text-white px-5 py-2 text-sm cursor-pointer transition-colors hover:bg-ink/80"
+                >
+                  {copied ? "Copied!" : "Share"}
+                </button>
+                <button
+                  type="button"
+                  onClick={nextSet}
+                  className="rounded-pill border border-ink px-5 py-2 text-sm cursor-pointer transition-colors hover:bg-ink/10"
+                >
+                  🔄 Play again
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

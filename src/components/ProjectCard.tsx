@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Dialog from "./Dialog"
+import ProjectMark from "./ProjectMark"
 import type { ProjectCardProps } from "../data/project"
 
 export default function ProjectCard(project: ProjectCardProps) {
@@ -15,12 +16,12 @@ export default function ProjectCard(project: ProjectCardProps) {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") setOpen(true)
         }}
-        className="group w-full aspect-4/3 border border-[#ECECEC] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-200 hover:cursor-pointer hover:-translate-y-1 hover:border-[#D9D9D9] hover:shadow-lg focus-visible:outline-none focus-visible:-translate-y-1 focus-visible:border-[#D9D9D9] focus-visible:shadow-lg"
+        className="group w-full aspect-4/3 bg-cream-card border border-[#ECECEC] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-200 hover:cursor-pointer hover:-translate-y-1 hover:border-[#D9D9D9] hover:shadow-lg focus-visible:outline-none focus-visible:-translate-y-1 focus-visible:border-[#D9D9D9] focus-visible:shadow-lg"
       >
-        <img
-          src={project.imgsrc}
-          alt={project.title}
-          className="w-10 h-10 rounded-[10px] object-cover transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-110 group-focus-visible:-translate-y-0.5 group-focus-visible:scale-110"
+        <ProjectMark
+          title={project.title}
+          imgsrc={project.imgsrc}
+          className="size-10 text-base transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-110 group-focus-visible:-translate-y-0.5 group-focus-visible:scale-110"
         />
 
         <div className="flex flex-col gap-2 border-t border-[#ECECEC] pt-3">

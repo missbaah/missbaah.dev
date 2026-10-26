@@ -75,10 +75,10 @@ export default function ProjectsBoard({
                 key={tab.value}
                 type="button"
                 onClick={() => setFilter(tab.value)}
-                className={`text-xs w-fit font-aeonik px-3.5 py-2 rounded-full border transition-colors ${
+                className={`text-xs w-fit font-aeonik px-3.5 py-2 rounded-full border transition-colors cursor-pointer ${
                   filter === tab.value
                     ? "bg-pink-strong text-pink-ink border-none font-bold"
-                    : "border-line-strong text-ink-soft "
+                    : "bg-cream-card border-line-strong text-ink-soft hover:text-ink"
                 }`}
               >
                 {tab.label}

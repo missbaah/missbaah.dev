@@ -6,7 +6,7 @@ export default function SkillCard(skill: SkillCardProps) {
       href={skill.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="group w-full aspect-4/3 border border-[#ECECEC] rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:border-[#D9D9D9] hover:shadow-lg focus-visible:outline-none focus-visible:-translate-y-1 focus-visible:border-[#D9D9D9] focus-visible:shadow-lg"
+      className="group w-full aspect-4/3 bg-cream-card border border-[#ECECEC] rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 hover:-translate-y-1 hover:border-[#D9D9D9] hover:shadow-lg focus-visible:outline-none focus-visible:-translate-y-1 focus-visible:border-[#D9D9D9] focus-visible:shadow-lg"
     >
       <span className="i-lucide-arrow-up-right self-end text-ink-soft transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
 

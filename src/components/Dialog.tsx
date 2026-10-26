@@ -1,6 +1,7 @@
 import { Dialog } from "radix-ui"
 import type { Dispatch, SetStateAction } from "react"
 import type { ProjectCardProps } from "../data/project"
+import ProjectMark from "./ProjectMark"
 
 export default function CustomDialog({
   open,
@@ -32,10 +33,10 @@ export default function CustomDialog({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <img
-                src={project.imgsrc}
-                alt=""
-                className="size-10 rounded-tile object-cover"
+              <ProjectMark
+                title={project.title}
+                imgsrc={project.imgsrc}
+                className="size-14 text-2xl"
               />
             )}
             <Dialog.Close
@@ -62,7 +63,7 @@ export default function CustomDialog({
             <p className="mt-2 text-ink-soft leading-snug">{project.desc}</p>
 
             <div className="mt-6 rounded-[16px] bg-cream-sunken px-5 py-5 sm:px-6">
-              <p className="text-xs uppercase tracking-widest text-ink-soft">
+              <p className="text-sm text-ink-soft">
                 About
               </p>
               <p className="mt-2.5 text-[15px] leading-relaxed text-ink-muted">

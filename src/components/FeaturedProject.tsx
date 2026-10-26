@@ -1,27 +1,20 @@
 import type { ProjectCardProps } from "../data/project"
+import ProjectMark from "./ProjectMark"
 
 export default function FeaturedProject(project: ProjectCardProps) {
   return (
     <div className="w-full border border-line border-l-2 border-l-[#EFC7CE] rounded-card bg-cream-card p-5 flex flex-col gap-6">
-      <img
-        src={project.imgsrc}
-        alt=""
-        className="w-10 h-10 rounded-tile object-cover"
-      />
+      <ProjectMark title={project.title} imgsrc={project.imgsrc} />
 
-      <div className="w-full aspect-video md:h-35  rounded-tile bg-cream-sunken border border-line-soft overflow-hidden flex items-center justify-center ">
-        {project.screenshot ? (
+      {project.screenshot && (
+        <div className="w-full aspect-video md:h-35  rounded-tile bg-cream-sunken border border-line-soft overflow-hidden flex items-center justify-center ">
           <img
             src={project.screenshot}
             alt={project.title}
             className="w-full h-full object-cover"
           />
-        ) : (
-          <span className="text-xs text-ink-soft uppercase tracking-wide font-aeonik">
-            Image goes here
-          </span>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="flex flex-col md:flex-row gap-6 md:gap-10 border-t border-line-soft pt-5">
         <div className="flex flex-col gap-2 md:w-1/3 shrink-0">

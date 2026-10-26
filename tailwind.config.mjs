@@ -35,6 +35,8 @@ export default {
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
         aeonik: ["var(--font-aeonik-pro)", "sans-serif"],
+        // handwritten asides only (p.s. lines, small labels), never body text
+        hand: ["var(--font-gochi)", "cursive"],
       },
     },
   },
