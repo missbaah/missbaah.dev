@@ -5,7 +5,11 @@ import { Font } from "astro:assets"
 import "@radix-ui/themes/styles.css"
 import "../styles/global.css"
 
-const { pageTitle = "Beebe Brako" } = Astro.props
+const {
+  pageTitle = "Beebe Brako · Software Engineer",
+  description = "Adwoa Baah Addo-Brako builds products that feel considered.",
+} = Astro.props
+const ogImage = new URL("/og-image.png", Astro.site)
 ---
 
 <!doctype html>
@@ -13,9 +17,24 @@ const { pageTitle = "Beebe Brako" } = Astro.props
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- Link previews when the site is shared -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Beebe Brako" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:alt" content="Illustrated avatar of Beebe Brako" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:image" content={ogImage} />
     <Font cssVariable="--font-aeonik-pro" />
     <Font cssVariable="--font-inter" />
   </head>
