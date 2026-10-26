@@ -39,7 +39,8 @@ body {
 
 /* Highlighter stroke behind inline text; ends fade slightly so it reads as
    hand-drawn, and clone keeps each wrapped line its own stroke */
-.marker {
+.marker,
+.marker-sweep {
   color: var(--pink-ink);
   padding: 0 0.25em;
   margin: 0 -0.1em;
@@ -47,8 +48,8 @@ body {
   background-image: linear-gradient(
     100deg,
     transparent 0.5%,
-    var(--pink) 2.5%,
-    var(--pink) 96%,
+    var(--marker-fill, var(--pink)) 2.5%,
+    var(--marker-fill, var(--pink)) 96%,
     transparent 99.5%
   );
   background-repeat: no-repeat;
@@ -56,6 +57,26 @@ body {
   background-size: 100% 62%;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+
+/* A lighter stroke, hidden until hover, then drawn in from the left */
+.marker-sweep {
+  --marker-fill: color-mix(in srgb, var(--pink) 50%, transparent);
+  color: var(--ink-soft);
+  background-position: 0 85%;
+  background-size: 0% 62%;
+  transition:
+    background-size 450ms ease-out,
+    color 450ms ease-out;
+}
+.marker-sweep:hover {
+  color: var(--pink-ink);
+  background-size: 100% 62%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marker-sweep {
+    transition: none;
+  }
 }
 
 /* Project dialog: bottom sheet on mobile, centred modal from sm up */
@@ -89,5 +110,25 @@ body {
   to {
     opacity: 0;
     transform: scale(0.96);
+  }
+}
+
+/* Word search feedback */
+@keyframes cell-pop {
+  40% {
+    transform: translateY(-4px) scale(1.12);
+  }
+}
+@keyframes chip-pop {
+  50% {
+    transform: scale(1.15);
+  }
+}
+@keyframes shake {
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
   }
 }

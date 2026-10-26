@@ -9,6 +9,7 @@ const WORD_SETS = [
   ["REACT", "ASTRO", "CSS", "DEPLOY", "PIXEL"],
 ]
 const STORAGE_KEY = "missbaah-word-search-found"
+const SOUND_KEY = "missbaah-word-search-sound"
 const SEED = 42
 // Fits the longest word; the grid only places words right or down
 const SIZE = Math.max(...WORD_SETS.flat().map((w) => w.length))
@@ -163,11 +164,34 @@ function matchesWord(selected: Cell[], placement: Placement) {
   return forward || backward
 }
 
+// Created on the first find, which always follows a pointerup, so browsers
+// that need a user gesture before playing audio allow it
+let audio: AudioContext | null = null
+
+// A short rising blip, synthesised so there's no sound file to load
+function playPop() {
+  try {
+    audio ??= new AudioContext()
+    const now = audio.currentTime
+    const osc = audio.createOscillator()
+    const gain = audio.createGain()
+    osc.type = "sine"
+    osc.frequency.setValueAtTime(520, now)
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.08)
+    gain.gain.setValueAtTime(0.12, now)
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18)
+    osc.connect(gain).connect(audio.destination)
+    osc.start(now)
+    osc.stop(now + 0.2)
+  } catch {}
+}
+
 function Puzzle({
   size,
   words,
   seed,
   found,
+  justFound,
   onFound,
   onStart,
 }: {
@@ -175,12 +199,15 @@ function Puzzle({
   words: string[]
   seed: number
   found: Set<string>
+  justFound: string | null
   onFound: (word: string) => void
   onStart: () => void
 }) {
   const grid = useMemo(() => buildGrid(size, words, seed), [size, words, seed])
   const [dragStart, setDragStart] = useState<Cell | null>(null)
   const [dragEnd, setDragEnd] = useState<Cell | null>(null)
+  // A swipe that matched no word stays lit just long enough to shake
+  const [missed, setMissed] = useState<Cell[]>([])
   // Refs mirror the drag so pointerup sees the latest cell even if a fast
   // swipe ends before React re-renders
   const startRef = useRef<Cell | null>(null)
@@ -212,6 +239,13 @@ function Puzzle({
       .filter((p) => found.has(p.word))
       .flatMap((p) => p.cells.map(cellKey))
   )
+  // Position of each cell within the word just found, to stagger its bounce
+  const popOrder = new Map(
+    grid.placements
+      .find((p) => p.word === justFound)
+      ?.cells.map((c, i) => [cellKey(c), i])
+  )
+  const missedCells = new Set(missed.map(cellKey))
 
   const cellAt = (x: number, y: number): Cell | null => {
     const el = document.elementFromPoint(x, y) as HTMLElement | null
@@ -223,10 +257,14 @@ function Puzzle({
   const finishSelection = (check: boolean) => {
     const final = selectionOf(startRef.current, endRef.current)
     if (check && final.length > 1) {
-      const match = grid.placements.find(
-        (p) => !found.has(p.word) && matchesWord(final, p)
-      )
-      if (match) onFound(match.word)
+      // Re-swiping a word already found is neither a find nor a miss
+      const match = grid.placements.find((p) => matchesWord(final, p))
+      if (!match) {
+        setMissed(final)
+        setTimeout(() => setMissed([]), 250)
+      } else if (!found.has(match.word)) {
+        onFound(match.word)
+      }
     }
     startRef.current = null
     endRef.current = null
@@ -266,18 +304,27 @@ function Puzzle({
           const key = cellKey({ row: r, col: c })
           const isSelected = selected.some((s) => cellKey(s) === key)
           const isFound = foundCells.has(key)
+          const isMissed = missedCells.has(key)
+          const pop = popOrder.get(key)
           return (
             <div
               key={key}
               data-row={r}
               data-col={c}
-              className={`aspect-square flex items-center justify-center text-sm font-aeonik rounded-md transition-colors ${
-                isFound
-                  ? "bg-pink text-pink-ink"
-                  : isSelected
+              style={
+                pop !== undefined
+                  ? { animationDelay: `${pop * 45}ms` }
+                  : undefined
+              }
+              className={`aspect-square flex items-center justify-center text-sm font-aeonik rounded-md transition-[background-color,color,scale,box-shadow] duration-150 ${
+                isSelected
+                  ? "bg-pink text-pink-ink relative z-10 shadow-md motion-safe:scale-[1.08]"
+                  : isFound
                     ? "bg-pink text-pink-ink"
-                    : "bg-ink text-[#F7F4EE]"
-              }`}
+                    : isMissed
+                      ? "bg-pink text-pink-ink motion-safe:animate-[shake_200ms_ease-in-out]"
+                      : "bg-ink text-[#F7F4EE]"
+              } ${pop !== undefined ? "motion-safe:animate-[cell-pop_350ms_ease-out_both]" : ""}`}
             >
               {letter}
             </div>
@@ -316,7 +363,24 @@ export default function WordSearch() {
   const [startedAt, setStartedAt] = useState<number | null>(null)
   const [elapsed, setElapsed] = useState<number | null>(null)
   const [copied, setCopied] = useState(false)
+  // The latest find, so its chip and cells can pop once
+  const [justFound, setJustFound] = useState<string | null>(null)
+  const [soundOn, setSoundOn] = useState(true)
   const words = WORD_SETS[setIndex]
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(SOUND_KEY) === "off") setSoundOn(false)
+    } catch {}
+  }, [])
+
+  const toggleSound = () => {
+    const next = !soundOn
+    setSoundOn(next)
+    try {
+      localStorage.setItem(SOUND_KEY, next ? "on" : "off")
+    } catch {}
+  }
 
   useEffect(() => {
     let stored: { set: number; found: string[] } | string[] | null = null
@@ -345,7 +409,10 @@ export default function WordSearch() {
     const next = new Set(found)
     next.add(word)
     setFound(next)
+    setJustFound(word)
     save(setIndex, next)
+    if (soundOn) playPop()
+    navigator.vibrate?.(15)
     if (startedAt !== null && words.every((w) => next.has(w))) {
       setElapsed(Date.now() - startedAt)
     }
@@ -355,6 +422,7 @@ export default function WordSearch() {
     const next = (setIndex + 1) % WORD_SETS.length
     setSetIndex(next)
     setFound(new Set())
+    setJustFound(null)
     setStartedAt(null)
     setElapsed(null)
     setCopied(false)
@@ -390,15 +458,27 @@ export default function WordSearch() {
         </p>
         <div className="flex items-center justify-between gap-3">
           <p className="text-xl">{words.length} words are hiding in here.</p>
-          <button
-            type="button"
-            onClick={nextSet}
-            aria-label="Try a different set of words"
-            title="Try a different set of words"
-            className="shrink-0 size-9 rounded-full border border-line-strong flex items-center justify-center text-base cursor-pointer transition-transform hover:rotate-180 duration-300"
-          >
-            🔄
-          </button>
+          <div className="flex gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={toggleSound}
+              aria-label={soundOn ? "Mute sound" : "Turn sound on"}
+              aria-pressed={!soundOn}
+              title={soundOn ? "Mute sound" : "Turn sound on"}
+              className="size-9 rounded-full border border-line-strong flex items-center justify-center text-base cursor-pointer"
+            >
+              {soundOn ? "🔈" : "🔇"}
+            </button>
+            <button
+              type="button"
+              onClick={nextSet}
+              aria-label="Try a different set of words"
+              title="Try a different set of words"
+              className="size-9 rounded-full border border-line-strong flex items-center justify-center text-base cursor-pointer transition-transform hover:rotate-180 duration-300"
+            >
+              🔄
+            </button>
+          </div>
         </div>
         <p className="text-sm leading-6 text-ink-muted">
           Press on the first letter of a word and drag across to the last, then
@@ -409,11 +489,11 @@ export default function WordSearch() {
           {words.map((word) => (
             <span
               key={word}
-              className={
+              className={`${
                 found.has(word)
                   ? "bg-pink text-pink-ink text-center py-2 px-3.5 rounded-full font-semibold"
                   : "text-ink-soft py-2 px-3.5 border border-line-strong rounded-full"
-              }
+              } ${word === justFound ? "motion-safe:animate-[chip-pop_300ms_ease-out]" : ""}`}
             >
               {word}
             </span>
@@ -427,6 +507,7 @@ export default function WordSearch() {
           words={words}
           seed={SEED + setIndex}
           found={found}
+          justFound={justFound}
           onFound={handleFound}
           onStart={handleStart}
         />
