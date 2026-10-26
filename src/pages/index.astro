@@ -1,5 +1,4 @@
 ---
-import BlogPost from "../components/BlogPost.astro"
 import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
 import "../styles/global.css"
@@ -7,16 +6,6 @@ import ProjectGrid from "../components/ProjectGrid.tsx"
 import FeaturedProject from "../components/FeaturedProject.tsx"
 import GreetingClock from "../components/GreetingClock.tsx"
 import Footer from "../components/Footer.astro"
-
-const MAX_POSTS = 3
-const allPosts = Object.values(
-  import.meta.glob("./posts/*.md", { eager: true })
-).slice(0, MAX_POSTS)
-
-const MAX_NOTES = 5
-const allNotes = Object.values(
-  import.meta.glob("./notes/*.md", { eager: true })
-).slice(0, MAX_NOTES)
 
 // homepage curation, independent of the Projects page's status grouping
 // exactly one project is `featured: true` — see CONTEXT.md "Featured is a singleton"

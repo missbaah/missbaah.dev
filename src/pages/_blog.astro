@@ -3,7 +3,7 @@ import BlogPost from "../components/BlogPost.astro";
 import Layout from "../layouts/Layout.astro";
 import '../styles/global.css'
 
-const allPosts = Object.values(import.meta.glob('./posts/*.md', {eager: true}))
+const allPosts = Object.values(import.meta.glob('./_posts/*.md', {eager: true}))
 
 // Group posts by years from publication dates
 
@@ -18,7 +18,7 @@ acc[year] = []
 
 ---
 
-<Layout pageTitle='Blog | missbaah'>
+<Layout pageTitle='Blog | Beebe Brako'>
     <p class=" mb-8">Here you'll find everything I have to say about my projects, experiences and experiments
     </p>
     {Object.entries(postByYears).map(([year, posts]: [string, any]) => (

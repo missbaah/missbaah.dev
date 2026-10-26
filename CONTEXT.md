@@ -4,6 +4,10 @@ Personal portfolio site: an Astro app that showcases projects, each rendered as 
 
 ## Language
 
+**Brand vs Handle**:
+The site's public name is **Beebe Brako**, used in page titles, metadata and visible copy. `missbaah` is the author's handle on external accounts (GitHub, email) and the repo name. It is not the site's name.
+_Avoid_: using `missbaah` as the site's display name, or renaming external account links to match the brand.
+
 **Project Status**:
 A project is either `done` or `in progress`. It is purely informational — it does not gate interactivity. A project card is equally clickable and opens the same dialog regardless of status.
 _Avoid_: assuming "in progress" implies disabled, unfinished, or non-interactive.

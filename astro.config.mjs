@@ -2,14 +2,15 @@
 import { defineConfig, fontProviders } from "astro/config"
 import tailwindcss from "@tailwindcss/vite"
 import react from "@astrojs/react"
-import vercel from "@astrojs/vercel"
+import sitemap from "@astrojs/sitemap"
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://beebebrako.com",
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [react()],
+  integrations: [react(), sitemap()],
   fonts: [
     {
       provider: fontProviders.local(),
@@ -46,6 +47,4 @@ export default defineConfig({
       cssVariable: "--font-inter",
     },
   ],
-
-  adapter: vercel(),
 })
