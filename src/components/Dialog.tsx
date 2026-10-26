@@ -62,10 +62,8 @@ export default function CustomDialog({
             </Dialog.Title>
             <p className="mt-2 text-ink-soft leading-snug">{project.desc}</p>
 
-            <div className="mt-6 rounded-[16px] bg-cream-sunken px-5 py-5 sm:px-6">
-              <p className="text-sm text-ink-soft">
-                About
-              </p>
+            <div className="mt-6 rounded-2xl bg-cream-sunken px-5 py-5 sm:px-6">
+              <p className="text-sm text-ink-soft">About</p>
               <p className="mt-2.5 text-[15px] leading-relaxed text-ink-muted">
                 {project.about}
               </p>
