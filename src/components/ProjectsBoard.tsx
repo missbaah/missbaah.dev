@@ -68,16 +68,15 @@ export default function ProjectsBoard({
             </p>
           </div>
 
-          <div className="flex gap-2 items-end md:justify-end w-full">
+          <div className="flex gap-5 items-end md:justify-end w-full font-aeonik text-sm">
             {tabs.map((tab) => (
               <button
                 key={tab.value}
                 type="button"
                 onClick={() => setFilter(tab.value)}
-                className={`text-xs w-fit font-aeonik px-3.5 py-2 rounded-full border transition-colors cursor-pointer ${
-                  filter === tab.value
-                    ? "bg-pink-strong text-pink-ink border-none font-bold"
-                    : "bg-cream-card border-line-strong text-ink-soft hover:text-ink"
+                aria-pressed={filter === tab.value}
+                className={`w-fit cursor-pointer ${
+                  filter === tab.value ? "marker font-bold" : "marker-sweep"
                 }`}
               >
                 {tab.label}
@@ -90,10 +89,10 @@ export default function ProjectsBoard({
         <div className="flex flex-col gap-8">
           {showDone && (
             <section className="flex flex-col gap-6">
-              <p className="text-xl font-aeonik capitalize font-bold">
+              <p className="text-xl font-aeonik font-bold">
                 Live{"  "}
-                <span className="text-ink-soft text-xs font-normal">
-                  {String(done.length).padStart(2, "0")}
+                <span className="font-hand text-ink-soft text-lg font-normal">
+                  ({done.length})
                 </span>
               </p>
               <div className="grid md:grid-cols-3 gap-6">
@@ -106,10 +105,10 @@ export default function ProjectsBoard({
 
           {showWip && (
             <section className="flex flex-col gap-6">
-              <p className="text-xl font-aeonik capitalize font-bold">
+              <p className="text-xl font-aeonik font-bold">
                 Working on{"  "}
-                <span className="text-ink-soft text-xs font-normal">
-                  {String(wip.length).padStart(2, "0")}
+                <span className="font-hand text-ink-soft text-lg font-normal">
+                  ({wip.length})
                 </span>
               </p>
               <div className="grid md:grid-cols-3 gap-6">
@@ -125,12 +124,13 @@ export default function ProjectsBoard({
               <div className="flex flex-col gap-1">
                 <p className="text-xl font-aeonik font-bold">
                   Claude skills{"  "}
-                  <span className="text-ink-soft text-xs font-normal">
-                    {String(skills.length).padStart(2, "0")}
+                  <span className="font-hand text-ink-soft text-lg font-normal">
+                    ({skills.length})
                   </span>
                 </p>
                 <p className="text-sm text-ink-soft">
-                  Workflows I've built and tested for Claude Code.
+                  Workflows I've built for Claude Code, each rewritten after
+                  real-world use.
                 </p>
               </div>
               <div className="grid md:grid-cols-3 gap-6">

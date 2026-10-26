@@ -21,7 +21,7 @@ const pathname = Astro.url.pathname.replace(/(.)\/$/, "$1")
         return (
           <a
             class={clsx(
-              item.path === pathname ? "marker font-bold" : "marker-sweep",
+              item.path === pathname ? "marker marker-draw font-bold" : "marker-sweep",
               "md:text-lg"
             )}
             href={item.path}

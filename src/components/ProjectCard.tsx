@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Dialog from "./Dialog"
-import ProjectMark from "./ProjectMark"
+import { CARD, StatusNote, Sticker, tiltFor } from "./Paper"
 import type { ProjectCardProps } from "../data/project"
 
 export default function ProjectCard(project: ProjectCardProps) {
@@ -16,32 +16,15 @@ export default function ProjectCard(project: ProjectCardProps) {
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") setOpen(true)
         }}
-        className="group w-full aspect-4/3 bg-cream-card border border-[#ECECEC] rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden transition-all duration-200 hover:cursor-pointer hover:-translate-y-1 hover:border-[#D9D9D9] hover:shadow-lg focus-visible:outline-none focus-visible:-translate-y-1 focus-visible:border-[#D9D9D9] focus-visible:shadow-lg"
+        className={`${CARD} ${tiltFor(project.title)} mt-3 w-full p-5 flex flex-col gap-3 cursor-pointer`}
       >
-        <ProjectMark
-          title={project.title}
-          imgsrc={project.imgsrc}
-          className="size-10 text-base transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-110 group-focus-visible:-translate-y-0.5 group-focus-visible:scale-110"
-        />
+        <Sticker title={project.title} imgsrc={project.imgsrc} />
 
-        <div className="flex flex-col gap-2 border-t border-[#ECECEC] pt-3">
-          <div className="flex items-center gap-1.5 mb-1">
-            <p className="font-bold text-sm font-aeonik">{project.title}</p>
-            <span className="inline-flex items-center gap-1">
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  project.status === "done" ? "bg-green-500" : "bg-amber-500"
-                }`}
-              />
-              <span className="text-xs text-gray-500 font-aeonik">
-                {project.status === "done" ? "Done" : "In Progress"}
-              </span>
-            </span>
-          </div>
-          <p className="font-aeonik text-sm text-gray-500 leading-relaxed">
-            {project.desc}
-          </p>
-        </div>
+        <p className="font-aeonik font-bold text-xl pr-10">{project.title}</p>
+        <p className="font-aeonik text-sm text-ink-muted leading-6">
+          {project.desc}
+        </p>
+        <StatusNote status={project.status} />
       </div>
       <Dialog project={project} open={open} onOpenChange={setOpen} />
     </>

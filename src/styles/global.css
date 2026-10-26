@@ -69,14 +69,38 @@ body {
     background-size 450ms ease-out,
     color 450ms ease-out;
 }
-.marker-sweep:hover {
+.marker-sweep:hover,
+.group:hover .marker-sweep,
+.group:focus-visible .marker-sweep {
   color: var(--pink-ink);
   background-size: 100% 62%;
+}
+
+/* The current page's nav link draws its marker in on arrival, the same
+   stroke the hover sweep uses */
+.marker-draw {
+  background-position: 0 85%;
+  animation: marker-draw 450ms ease-out;
+}
+@keyframes marker-draw {
+  from {
+    background-size: 0% 62%;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .marker-sweep {
     transition: none;
   }
+  .marker-draw {
+    animation: none;
+  }
+}
+
+/* Paper grain: fine fractal noise tinted warm brown at low alpha, laid over
+   the card colour so it reads as card stock, not a flat fill */
+.paper {
+  background-color: var(--cream-card);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.3 0 0 0 0 0.22 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Project dialog: bottom sheet on mobile, centred modal from sm up */

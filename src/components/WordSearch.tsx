@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react"
+import Doodle from "./Doodle"
+import { Tape } from "./Paper"
 
-// One set per round; the 🔄 button cycles through them. Keep words to 6
+// One set per round; the "again" button cycles through them. Keep words to 6
 // letters or fewer so every set fits the same grid.
 const WORD_SETS = [
   ["ADWOA", "CRAFT", "LEAN", "WEB", "DEXWIN"],
@@ -465,34 +467,35 @@ export default function WordSearch() {
               aria-label={soundOn ? "Mute sound" : "Turn sound on"}
               aria-pressed={!soundOn}
               title={soundOn ? "Mute sound" : "Turn sound on"}
-              className="size-9 rounded-full border border-line-strong flex items-center justify-center text-base cursor-pointer"
+              className="size-9 rounded-full flex items-center justify-center text-lg cursor-pointer hover:bg-cream-sunken"
             >
-              {soundOn ? "🔈" : "🔇"}
+              <Doodle name={soundOn ? "speaker" : "mute"} />
             </button>
             <button
               type="button"
               onClick={nextSet}
               aria-label="Try a different set of words"
               title="Try a different set of words"
-              className="size-9 rounded-full border border-line-strong flex items-center justify-center text-base cursor-pointer transition-transform hover:rotate-180 duration-300"
+              className="size-9 rounded-full flex items-center justify-center text-lg cursor-pointer hover:bg-cream-sunken transition-transform hover:rotate-180 duration-300"
             >
-              🔄
+              <Doodle name="again" />
             </button>
           </div>
         </div>
         <p className="text-sm leading-6 text-ink-muted">
           Press on the first letter of a word and drag across to the last, then
           let go. Words run left to right or top to bottom, and you can drag
-          them backwards too. Found words turn pink.
+          them backwards too. Found words turn pink and get crossed off.
         </p>
-        <div className="flex flex-wrap gap-x-2 gap-y-4 justify-start text-xs font-aeonik">
+        {/* Found words get crossed off in pink pen, like a paper puzzle */}
+        <div className="flex flex-wrap gap-x-5 gap-y-2 font-aeonik tracking-wide">
           {words.map((word) => (
             <span
               key={word}
               className={`${
                 found.has(word)
-                  ? "bg-pink text-pink-ink text-center py-2 px-3.5 rounded-full font-semibold"
-                  : "text-ink-soft py-2 px-3.5 border border-line-strong rounded-full"
+                  ? "text-ink-soft line-through decoration-pink-strong decoration-2"
+                  : "text-ink"
               } ${word === justFound ? "motion-safe:animate-[chip-pop_300ms_ease-out]" : ""}`}
             >
               {word}
@@ -516,8 +519,9 @@ export default function WordSearch() {
             role="status"
             className="absolute inset-0 flex items-center justify-center p-4 bg-cream-page/70 backdrop-blur-[2px] rounded-md animate-[fade-in_250ms_ease-out]"
           >
-            <div className="bg-pink text-pink-ink rounded-card px-6 py-5 text-center shadow-lg flex flex-col items-center gap-3 animate-[dialog-in_300ms_ease-out]">
-              <p className="text-3xl">🎉</p>
+            <div className="relative paper border border-line rounded-sm px-7 py-6 text-center shadow-md rotate-[-1.5deg] flex flex-col items-center gap-3 animate-[dialog-in_300ms_ease-out]">
+              <Tape className="-top-3 left-1/2 -translate-x-1/2 rotate-3 w-20" />
+              <Doodle name="party" className="text-4xl text-pink-strong" />
               <p className="font-aeonik font-bold text-lg">
                 You found them all!
               </p>
@@ -526,20 +530,26 @@ export default function WordSearch() {
                   in {formatTime(elapsed)}
                 </p>
               )}
-              <div className="flex gap-2">
+              <div className="flex gap-6 font-hand text-xl">
                 <button
                   type="button"
                   onClick={share}
-                  className="rounded-pill bg-ink text-white px-5 py-2 text-sm cursor-pointer transition-colors hover:bg-ink/80"
+                  className="marker-sweep cursor-pointer"
                 >
-                  {copied ? "Copied!" : "Share"}
+                  {copied ? (
+                    "copied!"
+                  ) : (
+                    <>
+                      share it <Doodle name="arrow" />
+                    </>
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={nextSet}
-                  className="rounded-pill border border-ink px-5 py-2 text-sm cursor-pointer transition-colors hover:bg-ink/10"
+                  className="marker-sweep cursor-pointer"
                 >
-                  🔄 Play again
+                  play again <Doodle name="again" />
                 </button>
               </div>
             </div>
