@@ -2,6 +2,7 @@ export interface ProjectCardProps {
   title: string
   desc: string
   imgsrc: string
+  screenshot?: string
   about: string
   featured: boolean
   status: "done" | "in progress"
@@ -47,7 +48,7 @@ export const projects: ProjectCardProps[] = [
     title: "Recipe Vault",
     desc: "A personal recipe organizer with tagging and search.",
     imgsrc: "/image1.png",
-    featured: true,
+    featured: false,
     status: "done",
     about:
       "Recipe Vault lets users save, tag, and search their own recipe collection, with support for ingredient-based filtering and quick meal planning views.",

@@ -4,6 +4,7 @@ import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
 import "../styles/global.css"
 import ProjectGrid from "../components/ProjectGrid.tsx"
+import FeaturedProject from "../components/FeaturedProject.tsx"
 import GreetingClock from "../components/GreetingClock.tsx"
 import Footer from "../components/Footer.astro"
 
@@ -18,7 +19,9 @@ const allNotes = Object.values(
 ).slice(0, MAX_NOTES)
 
 // homepage curation, independent of the Projects page's status grouping
-const featuredProjects = projects.filter((project) => project.featured)
+// exactly one project is `featured: true` — see CONTEXT.md "Featured is a singleton"
+const featuredProject = projects.find((project) => project.featured)
+const otherProjects = projects.filter((project) => !project.featured)
 ---
 
 <Layout>
@@ -27,11 +30,13 @@ const featuredProjects = projects.filter((project) => project.featured)
       <GreetingClock client:load />
     </div>
     <div class="flex flex-col md:flex-row gap-10 md:items-start">
-      <div class="flex flex-col gap-6 w-3/4 font-aeonik">
+      <div
+        class="flex flex-col gap-6 w-full md:w-3/4 font-aeonik order-2 md:order-1"
+      >
         <h1 class="text-3xl md:text-6xl flex font-bold">
           Adwoa Baah Addo-Brako
         </h1>
-        <p class="text-2xl leading-8">
+        <p class="text-lg md:text-2xl leading-8">
           I build interfaces that feel considered
         </p>
         <p class="text-base leading-7 text-ink-soft w-fit">
@@ -43,15 +48,41 @@ const featuredProjects = projects.filter((project) => project.featured)
       <img
         src="/notionface.png"
         alt="avatar"
-        class="size-24 md:size-44 shrink-0 mx-auto md:mx-0"
+        class="size-24 md:size-44 shrink-0 order-1 md:order-2"
       />
     </div>
 
     <hr class="border-b w-full border-[#EAEAE9]" />
-    <section class="flex flex-col py-4 gap-6 w-full">
-      <h2 class="capitalize text-gray-light text-sm">Featured Projects</h2>
-      <ProjectGrid projects={featuredProjects} client:load />
+
+    {
+      featuredProject && (
+        <section class="flex flex-col gap-6 w-full">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-aeonik font-bold">Featured</h2>
+            <a
+              href="/projects"
+              class="text-sm text-pink-link hover:text-pink-link-hover transition-colors"
+            >
+              All projects ↗
+            </a>
+          </div>
+          <FeaturedProject {...featuredProject} client:load />
+        </section>
+      )
+    }
+
+    <hr class="border-b w-full border-[#EAEAE9]" />
+
+    <section class="flex flex-col gap-6 w-full">
+      <h2 class="text-2xl font-aeonik font-bold">
+        Also live{"  "}
+        <span class="text-ink-soft text-sm font-normal">
+          {String(otherProjects.length).padStart(2, "0")}
+        </span>
+      </h2>
+      <ProjectGrid projects={otherProjects} client:load />
     </section>
+
     <hr class="w-full text-line" />
     <Footer class="block" />
   </div>
