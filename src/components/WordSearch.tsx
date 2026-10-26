@@ -188,6 +188,40 @@ function playPop() {
   } catch {}
 }
 
+// A marker loop drawn around a straight run of cells, sized as a share of
+// the grid so it needs no measuring. `tilt` keeps loops from looking stamped
+function Loop({
+  cells,
+  size,
+  className,
+}: {
+  cells: Cell[]
+  size: number
+  className: string
+}) {
+  const rows = cells.map((c) => c.row)
+  const cols = cells.map((c) => c.col)
+  const top = Math.min(...rows)
+  const left = Math.min(...cols)
+  const height = Math.max(...rows) - top + 1
+  const width = Math.max(...cols) - left + 1
+  const tilt = (top * 7 + left * 3) % 2 ? "rotate-[1.5deg]" : "rotate-[-1.5deg]"
+  const at = (n: number) => `calc(${(n / size) * 100}% + 3px)`
+  const span = (n: number) => `calc(${(n / size) * 100}% - 6px)`
+  return (
+    <div
+      aria-hidden
+      className={`absolute pointer-events-none rounded-full ${height > 1 ? "" : tilt} ${className}`}
+      style={{
+        top: at(top),
+        left: at(left),
+        width: span(width),
+        height: span(height),
+      }}
+    />
+  )
+}
+
 function Puzzle({
   size,
   words,
@@ -236,10 +270,9 @@ function Puzzle({
 
   const selected = selectionOf(dragStart, dragEnd)
 
+  const foundPlacements = grid.placements.filter((p) => found.has(p.word))
   const foundCells = new Set(
-    grid.placements
-      .filter((p) => found.has(p.word))
-      .flatMap((p) => p.cells.map(cellKey))
+    foundPlacements.flatMap((p) => p.cells.map(cellKey))
   )
   // Position of each cell within the word just found, to stagger its bounce
   const popOrder = new Map(
@@ -247,7 +280,6 @@ function Puzzle({
       .find((p) => p.word === justFound)
       ?.cells.map((c, i) => [cellKey(c), i])
   )
-  const missedCells = new Set(missed.map(cellKey))
 
   const cellAt = (x: number, y: number): Cell | null => {
     const el = document.elementFromPoint(x, y) as HTMLElement | null
@@ -275,64 +307,95 @@ function Puzzle({
   }
 
   return (
-    <div
-      ref={gridRef}
-      className="grid gap-1 mx-auto w-full max-w-sm touch-none select-none [-webkit-touch-callout:none]"
-      style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
-      onPointerDown={(e) => {
-        const cell = cellAt(e.clientX, e.clientY)
-        if (!cell) return
-        // Keep receiving moves and the final pointerup even if the finger
-        // slides off the grid
-        e.currentTarget.setPointerCapture(e.pointerId)
-        onStart()
-        startRef.current = cell
-        endRef.current = cell
-        setDragStart(cell)
-        setDragEnd(cell)
-      }}
-      onPointerMove={(e) => {
-        if (!startRef.current) return
-        const cell = cellAt(e.clientX, e.clientY)
-        if (!cell) return
-        endRef.current = cell
-        setDragEnd(cell)
-      }}
-      onPointerUp={() => startRef.current && finishSelection(true)}
-      onPointerCancel={() => finishSelection(false)}
-    >
-      {grid.letters.map((row, r) =>
-        row.map((letter, c) => {
-          const key = cellKey({ row: r, col: c })
-          const isSelected = selected.some((s) => cellKey(s) === key)
-          const isFound = foundCells.has(key)
-          const isMissed = missedCells.has(key)
-          const pop = popOrder.get(key)
-          return (
-            <div
-              key={key}
-              data-row={r}
-              data-col={c}
-              style={
-                pop !== undefined
-                  ? { animationDelay: `${pop * 45}ms` }
-                  : undefined
-              }
-              className={`aspect-square flex items-center justify-center text-sm font-aeonik rounded-md transition-[background-color,color,scale,box-shadow] duration-150 ${
-                isSelected
-                  ? "bg-pink text-pink-ink relative z-10 shadow-md motion-safe:scale-[1.08]"
-                  : isFound
-                    ? "bg-pink text-pink-ink"
-                    : isMissed
-                      ? "bg-pink text-pink-ink motion-safe:animate-[shake_200ms_ease-in-out]"
-                      : "bg-ink text-[#F7F4EE]"
-              } ${pop !== undefined ? "motion-safe:animate-[cell-pop_350ms_ease-out_both]" : ""}`}
-            >
-              {letter}
-            </div>
-          )
-        })
-      )}
+    // Printed puzzle on a paper card: plain letters on faint rules, and words
+    // get circled in marker as they're found
+    <div className="paper border border-line rounded-sm shadow-sm p-3 mx-auto w-full max-w-sm">
+      <div
+        ref={gridRef}
+        className="relative grid border-r border-b border-line-soft touch-none select-none [-webkit-touch-callout:none]"
+        style={{
+          gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
+          // Rules live in the background so the loops sit on top of them
+          backgroundImage:
+            "linear-gradient(to right, var(--line-soft) 1px, transparent 1px), linear-gradient(to bottom, var(--line-soft) 1px, transparent 1px)",
+          backgroundSize: `${100 / size}% ${100 / size}%`,
+        }}
+        onPointerDown={(e) => {
+          const cell = cellAt(e.clientX, e.clientY)
+          if (!cell) return
+          // Keep receiving moves and the final pointerup even if the finger
+          // slides off the grid
+          e.currentTarget.setPointerCapture(e.pointerId)
+          onStart()
+          startRef.current = cell
+          endRef.current = cell
+          setDragStart(cell)
+          setDragEnd(cell)
+        }}
+        onPointerMove={(e) => {
+          if (!startRef.current) return
+          const cell = cellAt(e.clientX, e.clientY)
+          if (!cell) return
+          endRef.current = cell
+          setDragEnd(cell)
+        }}
+        onPointerUp={() => startRef.current && finishSelection(true)}
+        onPointerCancel={() => finishSelection(false)}
+      >
+        {foundPlacements.map((p) => (
+          <Loop
+            key={p.word}
+            cells={p.cells}
+            size={size}
+            className={`border-2 border-pink-strong bg-pink/30 ${
+              p.word === justFound
+                ? "motion-safe:animate-[loop-in_300ms_ease-out]"
+                : ""
+            }`}
+          />
+        ))}
+        {selected.length > 0 && (
+          <Loop cells={selected} size={size} className="bg-pink/60" />
+        )}
+        {missed.length > 0 && (
+          <Loop
+            cells={missed}
+            size={size}
+            className="bg-pink/60 motion-safe:animate-[shake_200ms_ease-in-out]"
+          />
+        )}
+        {grid.letters.map((row, r) =>
+          row.map((letter, c) => {
+            const key = cellKey({ row: r, col: c })
+            const isSelected = selected.some((s) => cellKey(s) === key)
+            const isFound = foundCells.has(key)
+            const pop = popOrder.get(key)
+            return (
+              <div
+                key={key}
+                data-row={r}
+                data-col={c}
+                style={
+                  pop !== undefined
+                    ? { animationDelay: `${pop * 45}ms` }
+                    : undefined
+                }
+                className={`relative aspect-square flex items-center justify-center font-aeonik text-base ${
+                  isSelected || isFound ? "text-pink-ink" : "text-ink"
+                } ${pop !== undefined ? "motion-safe:animate-[cell-pop_350ms_ease-out_both]" : ""}`}
+              >
+                <span
+                  className={`transition-[scale] duration-150 ${
+                    isSelected ? "font-bold motion-safe:scale-125" : ""
+                  }`}
+                >
+                  {letter}
+                </span>
+              </div>
+            )
+          })
+        )}
+      </div>
     </div>
   )
 }
@@ -485,7 +548,7 @@ export default function WordSearch() {
         <p className="text-sm leading-6 text-ink-muted">
           Press on the first letter of a word and drag across to the last, then
           let go. Words run left to right or top to bottom, and you can drag
-          them backwards too. Found words turn pink and get crossed off.
+          them backwards too. Found words get circled and crossed off.
         </p>
         {/* Found words get crossed off in pink pen, like a paper puzzle */}
         <div className="flex flex-wrap gap-x-5 gap-y-2 font-aeonik tracking-wide">
@@ -517,7 +580,7 @@ export default function WordSearch() {
         {allFound && (
           <div
             role="status"
-            className="absolute inset-0 flex items-center justify-center p-4 bg-cream-page/70 backdrop-blur-[2px] rounded-md animate-[fade-in_250ms_ease-out]"
+            className="absolute inset-0 flex items-center justify-center p-4 bg-cream-page/70 backdrop-blur-[2px] rounded-sm animate-[fade-in_250ms_ease-out]"
           >
             <div className="relative paper border border-line rounded-sm px-7 py-6 text-center shadow-md rotate-[-1.5deg] flex flex-col items-center gap-3 animate-[dialog-in_300ms_ease-out]">
               <Tape className="-top-3 left-1/2 -translate-x-1/2 rotate-3 w-20" />

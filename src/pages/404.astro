@@ -1,19 +1,52 @@
 ---
 import Layout from "../layouts/Layout.astro"
+import Doodle from "../components/Doodle.tsx"
 import "../styles/global.css"
+
+// Torn bottom edge for the note: an uneven zigzag, fixed so it never shifts
+const teeth = [3, 7, 2, 6, 4, 8, 3, 6, 2, 7, 4, 6, 3, 8, 2, 5, 4, 7, 3, 6]
+const tornEdge = `polygon(0 0, 100% 0, ${teeth
+  .map((t, i) => {
+    const x = 100 - (i * 100) / (teeth.length - 1)
+    return `${x}% calc(100% - ${t}px)`
+  })
+  .join(", ")})`
 ---
 
 <Layout pageTitle="Not found | Beebe Brako">
-  <div class="flex flex-col gap-6 mt-6 font-aeonik">
-    <h1 class="text-3xl md:text-6xl font-bold">Nothing here</h1>
-    <p class="text-base leading-7 text-ink-soft">
-      This page doesn't exist, or it's not ready yet.
-    </p>
-    <a
-      href="/"
-      class="text-sm text-pink-link hover:text-pink-link-hover transition-colors"
+  <div class="flex flex-col gap-10 mt-10 font-aeonik">
+    <div class="flex flex-col gap-4">
+      <h1 class="text-3xl md:text-4xl font-bold leading-10">Nothing here</h1>
+      <p class="text-base leading-7 text-ink-soft">
+        This page doesn't exist, or it's not ready yet.
+      </p>
+    </div>
+
+    <!-- A scrap torn off a page and taped down -->
+    <div
+      class="relative self-start w-full max-w-sm rotate-[-2deg] drop-shadow-[0_1px_2px_rgb(0_0_0/0.08)]"
     >
-      ← Back home
-    </a>
+      <span
+        aria-hidden="true"
+        class="absolute z-10 -top-3 left-1/2 -translate-x-1/2 h-6 w-20 bg-pink/60 rotate-2"
+      ></span>
+      <div
+        class="paper border border-line px-7 pt-8 pb-10 flex flex-col gap-5"
+        style={{ clipPath: tornEdge }}
+      >
+        <p
+          aria-hidden="true"
+          class="self-end -mb-4 text-5xl font-bold text-line-strong rotate-3"
+        >
+          404
+        </p>
+        <p class="font-hand text-3xl leading-9 text-ink">
+          you've wandered off the page
+        </p>
+        <a href="/" class="self-start font-hand text-xl marker-sweep">
+          <Doodle name="home" /> take me home
+        </a>
+      </div>
+    </div>
   </div>
 </Layout>
