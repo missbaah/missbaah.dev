@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react"
 const WORDS = ["ADWOA", "CRAFT", "LEAN", "WEB", "DEXWIN"]
 const STORAGE_KEY = "missbaah-word-search-found"
 const SEED = 42
+// Fits the longest word; the grid only places words right or down
+const SIZE = Math.max(...WORDS.map((w) => w.length))
 
 type Direction = "right" | "down"
 type Cell = { row: number; col: number }
@@ -125,14 +127,31 @@ function Puzzle({
   const grid = useMemo(() => buildGrid(size, WORDS, SEED), [size])
   const [dragStart, setDragStart] = useState<Cell | null>(null)
   const [dragEnd, setDragEnd] = useState<Cell | null>(null)
-  const draggingRef = useRef(false)
+  // Refs mirror the drag so pointerup sees the latest cell even if a fast
+  // swipe ends before React re-renders
+  const startRef = useRef<Cell | null>(null)
+  const endRef = useRef<Cell | null>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
 
-  const selected =
-    dragStart && dragEnd && sameLine(dragStart, dragEnd)
-      ? cellsBetween(dragStart, dragEnd)
-      : dragStart
-        ? [dragStart]
+  // iOS Safari can still scroll the page mid-drag despite touch-action: none
+  useEffect(() => {
+    const el = gridRef.current
+    if (!el) return
+    const block = (e: TouchEvent) => {
+      if (startRef.current) e.preventDefault()
+    }
+    el.addEventListener("touchmove", block, { passive: false })
+    return () => el.removeEventListener("touchmove", block)
+  }, [])
+
+  const selectionOf = (start: Cell | null, end: Cell | null) =>
+    start && end && sameLine(start, end)
+      ? cellsBetween(start, end)
+      : start
+        ? [start]
         : []
+
+  const selected = selectionOf(dragStart, dragEnd)
 
   const foundCells = new Set(
     grid.placements
@@ -140,48 +159,52 @@ function Puzzle({
       .flatMap((p) => p.cells.map(cellKey))
   )
 
-  const finishSelection = () => {
-    if (draggingRef.current && selected.length > 1) {
+  const cellAt = (x: number, y: number): Cell | null => {
+    const el = document.elementFromPoint(x, y) as HTMLElement | null
+    const target = el?.closest("[data-row]") as HTMLElement | null
+    if (!target || !gridRef.current?.contains(target)) return null
+    return { row: Number(target.dataset.row), col: Number(target.dataset.col) }
+  }
+
+  const finishSelection = (check: boolean) => {
+    const final = selectionOf(startRef.current, endRef.current)
+    if (check && final.length > 1) {
       const match = grid.placements.find(
-        (p) => !found.has(p.word) && matchesWord(selected, p)
+        (p) => !found.has(p.word) && matchesWord(final, p)
       )
       if (match) onFound(match.word)
     }
-    draggingRef.current = false
+    startRef.current = null
+    endRef.current = null
     setDragStart(null)
     setDragEnd(null)
   }
 
   return (
     <div
-      className="grid gap-1 mx-auto w-full max-w-xs md:max-w-sm touch-none select-none"
-      style={{ gridTemplateColumns: `repeat(${size}, 48px)` }}
+      ref={gridRef}
+      className="grid gap-1 mx-auto w-full max-w-sm touch-none select-none [-webkit-touch-callout:none]"
+      style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}
       onPointerDown={(e) => {
-        const target = (e.target as HTMLElement).closest(
-          "[data-row]"
-        ) as HTMLElement | null
-        if (!target) return
-        const row = Number(target.dataset.row)
-        const col = Number(target.dataset.col)
-        draggingRef.current = true
-        setDragStart({ row, col })
-        setDragEnd({ row, col })
+        const cell = cellAt(e.clientX, e.clientY)
+        if (!cell) return
+        // Keep receiving moves and the final pointerup even if the finger
+        // slides off the grid
+        e.currentTarget.setPointerCapture(e.pointerId)
+        startRef.current = cell
+        endRef.current = cell
+        setDragStart(cell)
+        setDragEnd(cell)
       }}
       onPointerMove={(e) => {
-        if (!draggingRef.current) return
-        const el = document.elementFromPoint(
-          e.clientX,
-          e.clientY
-        ) as HTMLElement | null
-        const target = el?.closest("[data-row]") as HTMLElement | null
-        if (!target) return
-        setDragEnd({
-          row: Number(target.dataset.row),
-          col: Number(target.dataset.col),
-        })
+        if (!startRef.current) return
+        const cell = cellAt(e.clientX, e.clientY)
+        if (!cell) return
+        endRef.current = cell
+        setDragEnd(cell)
       }}
-      onPointerUp={finishSelection}
-      onPointerLeave={() => draggingRef.current && finishSelection()}
+      onPointerUp={() => startRef.current && finishSelection(true)}
+      onPointerCancel={() => finishSelection(false)}
     >
       {grid.letters.map((row, r) =>
         row.map((letter, c) => {
@@ -193,7 +216,7 @@ function Puzzle({
               key={key}
               data-row={r}
               data-col={c}
-              className={`aspect-square flex items-center justify-center text-xs md:text-sm font-aeonik rounded-md transition-colors ${
+              className={`aspect-square flex items-center justify-center text-sm font-aeonik rounded-md transition-colors ${
                 isFound
                   ? "bg-pink text-pink-ink"
                   : isSelected
@@ -239,7 +262,12 @@ export default function WordSearch() {
         <p className="text-xs text-ink-soft uppercase">
           The one waiting for you
         </p>
-        <p className="text-xl">Six words are hiding in here.</p>
+        <p className="text-xl">{WORDS.length} words are hiding in here.</p>
+        <p className="text-sm leading-6 text-ink-muted">
+          Press on the first letter of a word and drag across to the last, then
+          let go. Words run left to right or top to bottom, and you can drag
+          them backwards too. Found words turn pink.
+        </p>
         <div className="flex flex-wrap gap-x-2 gap-y-4 justify-start text-xs font-aeonik">
           {WORDS.map((word) => (
             <span
@@ -255,11 +283,8 @@ export default function WordSearch() {
           ))}
         </div>
       </div>
-      <div className="md:hidden">
-        <Puzzle size={5} found={found} onFound={handleFound} />
-      </div>
-      <div className="hidden md:block w-full max-w-sm ">
-        <Puzzle size={6} found={found} onFound={handleFound} />
+      <div className="w-full md:max-w-sm">
+        <Puzzle size={SIZE} found={found} onFound={handleFound} />
       </div>
     </div>
   )
