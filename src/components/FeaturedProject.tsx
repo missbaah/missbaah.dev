@@ -47,24 +47,30 @@ export default function FeaturedProject(project: ProjectCardProps) {
           <p className="font-aeonik text-sm text-ink-muted leading-relaxed">
             {project.about}
           </p>
-          <div className="flex gap-3">
-            <a
-              href={project.siteLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm text-white bg-ink rounded-pill px-4 py-2 hover:bg-ink/80 transition-colors"
-            >
-              Open Project <span className="i-lucide-arrow-up-right" />
-            </a>
-            <a
-              href={project.githubLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm border border-line-strong rounded-pill px-4 py-2 hover:bg-cream-sunken transition-colors"
-            >
-              <span className="i-lucide-github" /> Github
-            </a>
-          </div>
+          {(project.siteLink || project.githubLink) && (
+            <div className="flex gap-3">
+              {project.siteLink && (
+                <a
+                  href={project.siteLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm text-white bg-ink rounded-pill px-4 py-2 hover:bg-ink/80 transition-colors"
+                >
+                  Open Project <span className="i-lucide-arrow-up-right" />
+                </a>
+              )}
+              {project.githubLink && (
+                <a
+                  href={project.githubLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-sm border border-line-strong rounded-pill px-4 py-2 hover:bg-cream-sunken transition-colors"
+                >
+                  <span className="i-lucide-github" /> Github
+                </a>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -27,8 +27,15 @@ export default function ProjectsBoard({
     [projects]
   )
 
-  const showDone = filter === "all" || filter === "done"
-  const showWip = filter === "all" || filter === "in progress"
+  // empty groups are hidden, along with their filter tab
+  const showDone = done.length > 0 && (filter === "all" || filter === "done")
+  const showWip =
+    wip.length > 0 && (filter === "all" || filter === "in progress")
+  const tabs = TABS.filter(
+    (tab) =>
+      tab.value === "all" ||
+      (tab.value === "done" ? done.length > 0 : wip.length > 0)
+  )
 
   return (
     <Theme data-is-root-theme="false" className="bg-transparent!">
@@ -54,7 +61,7 @@ export default function ProjectsBoard({
           </div>
 
           <div className="flex gap-2 items-end md:justify-end w-full">
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
               <button
                 key={tab.value}
                 type="button"

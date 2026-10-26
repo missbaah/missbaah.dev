@@ -60,17 +60,22 @@ const otherProjects = projects.filter((project) => !project.featured)
       )
     }
 
-    <hr class="border-b w-full border-[#EAEAE9]" />
-
-    <section class="flex flex-col gap-6 w-full">
-      <h2 class="text-2xl font-aeonik font-bold">
-        Also live{"  "}
-        <span class="text-ink-soft text-sm font-normal">
-          {String(otherProjects.length).padStart(2, "0")}
-        </span>
-      </h2>
-      <ProjectGrid projects={otherProjects} client:load />
-    </section>
+    {
+      otherProjects.length > 0 && (
+        <>
+          <hr class="border-b w-full border-[#EAEAE9]" />
+          <section class="flex flex-col gap-6 w-full">
+            <h2 class="text-2xl font-aeonik font-bold">
+              Also live{"  "}
+              <span class="text-ink-soft text-sm font-normal">
+                {String(otherProjects.length).padStart(2, "0")}
+              </span>
+            </h2>
+            <ProjectGrid projects={otherProjects} client:load />
+          </section>
+        </>
+      )
+    }
 
     <hr class="w-full text-line" />
     <Footer class="block" />

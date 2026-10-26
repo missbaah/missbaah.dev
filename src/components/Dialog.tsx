@@ -21,24 +21,30 @@ export default function CustomDialog({
             <h2 className="text-h-sub-text font-aeonik">{project.title}</h2>
           </div>
           <p className="text-sub-text">{project.desc}</p>
-          <div className="flex justify-center gap-3 mt-3">
-            <a
-              href={project.siteLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white cursor-pointer bg-black text-center hover:bg-black/60 backdrop-blur-md px-2 py-2 rounded-lg flex-1 transition-all duration-300 hover:ease-in-out"
-            >
-              Open Project <span className="i-lucide-arrow-up-right"></span>
-            </a>
-            <div className="flex justify-center gap-3  border-[#ECECEC] border rounded-lg p-2 hover:bg-black/4 transition-all duration-300 hover:ease-in-out">
-              <a
-                href={project.githubLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="i-lucide-github text-xl cursor-pointer"
-              ></a>
+          {(project.siteLink || project.githubLink) && (
+            <div className="flex justify-center gap-3 mt-3">
+              {project.siteLink && (
+                <a
+                  href={project.siteLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white cursor-pointer bg-black text-center hover:bg-black/60 backdrop-blur-md px-2 py-2 rounded-lg flex-1 transition-all duration-300 hover:ease-in-out"
+                >
+                  Open Project <span className="i-lucide-arrow-up-right"></span>
+                </a>
+              )}
+              {project.githubLink && (
+                <div className="flex justify-center gap-3  border-[#ECECEC] border rounded-lg p-2 hover:bg-black/4 transition-all duration-300 hover:ease-in-out">
+                  <a
+                    href={project.githubLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="i-lucide-github text-xl cursor-pointer"
+                  ></a>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </section>
       </Dialog.Content>
     </Dialog.Root>
