@@ -55,9 +55,8 @@ export default function ProjectsBoard({
               Projects
             </h1>
             <p className="text-ink-soft leading-7">
-              Here are some of the projects I'm currently working on, and some
-              of the projects I've worked on in the past. You can also check out
-              my{" "}
+              You met me at a very WIP project section. Fret not! Live projects
+              soon. You can also check out my{" "}
               <a
                 className="text-pink-link hover:text-pink-link-hover transition-colors"
                 href="https://github.com/missbaah"
