@@ -2,14 +2,14 @@ import type { ProjectCardProps } from "../data/project"
 
 export default function FeaturedProject(project: ProjectCardProps) {
   return (
-    <div className="w-full border border-line rounded-card bg-cream-card p-5 flex flex-col gap-6">
+    <div className="w-full border border-line border-l-2 border-l-[#EFC7CE] rounded-card bg-cream-card p-5 flex flex-col gap-6">
       <img
         src={project.imgsrc}
         alt=""
         className="w-10 h-10 rounded-tile object-cover"
       />
 
-      <div className="w-full aspect-16/9 md:aspect-21/9 rounded-tile bg-cream-sunken border border-line-soft overflow-hidden flex items-center justify-center">
+      <div className="w-full aspect-video md:h-35  rounded-tile bg-cream-sunken border border-line-soft overflow-hidden flex items-center justify-center ">
         {project.screenshot ? (
           <img
             src={project.screenshot}
