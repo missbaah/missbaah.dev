@@ -1,20 +1,25 @@
 import { useMemo, useState } from "react"
 import { Theme } from "@radix-ui/themes"
 import type { ProjectCardProps } from "../data/project"
+import type { SkillCardProps } from "../data/skill"
 import ProjectCard from "./ProjectCard"
+import SkillCard from "./SkillCard"
 
-type Filter = "all" | "done" | "in progress"
+type Filter = "all" | "done" | "in progress" | "skills"
 
 const TABS: { label: string; value: Filter }[] = [
   { label: "All", value: "all" },
   { label: "Live", value: "done" },
   { label: "In progress", value: "in progress" },
+  { label: "Claude skills", value: "skills" },
 ]
 
 export default function ProjectsBoard({
   projects,
+  skills,
 }: {
   projects: ProjectCardProps[]
+  skills: SkillCardProps[]
 }) {
   const [filter, setFilter] = useState<Filter>("all")
 
@@ -31,11 +36,15 @@ export default function ProjectsBoard({
   const showDone = done.length > 0 && (filter === "all" || filter === "done")
   const showWip =
     wip.length > 0 && (filter === "all" || filter === "in progress")
-  const tabs = TABS.filter(
-    (tab) =>
-      tab.value === "all" ||
-      (tab.value === "done" ? done.length > 0 : wip.length > 0)
-  )
+  const showSkills =
+    skills.length > 0 && (filter === "all" || filter === "skills")
+  const groupSizes: Record<Filter, number> = {
+    all: 1,
+    done: done.length,
+    "in progress": wip.length,
+    skills: skills.length,
+  }
+  const tabs = TABS.filter((tab) => groupSizes[tab.value] > 0)
 
   return (
     <Theme data-is-root-theme="false" className="bg-transparent!">
@@ -107,6 +116,27 @@ export default function ProjectsBoard({
               <div className="grid md:grid-cols-3 gap-6">
                 {wip.map((project, i) => (
                   <ProjectCard key={`${project.title}-${i}`} {...project} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {showSkills && (
+            <section className="flex flex-col gap-6">
+              <div className="flex flex-col gap-1">
+                <p className="text-xl font-aeonik font-bold">
+                  Claude skills{"  "}
+                  <span className="text-ink-soft text-xs font-normal">
+                    {String(skills.length).padStart(2, "0")}
+                  </span>
+                </p>
+                <p className="text-sm text-ink-soft">
+                  Workflows I've built and tested for Claude Code.
+                </p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-6">
+                {skills.map((skill) => (
+                  <SkillCard key={skill.name} {...skill} />
                 ))}
               </div>
             </section>

@@ -1,10 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro"
 import { projects } from "../data/project.ts"
+import { skills } from "../data/skill.ts"
 import ProjectsBoard from "../components/ProjectsBoard.tsx"
 import "../styles/global.css"
 ---
 
 <Layout pageTitle="Projects | Beebe Brako">
-  <ProjectsBoard projects={projects} client:load />
+  <ProjectsBoard projects={projects} skills={skills} client:load />
 </Layout>

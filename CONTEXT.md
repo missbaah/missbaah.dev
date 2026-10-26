@@ -20,6 +20,10 @@ _Avoid_: using `featured` to decide what shows on the Projects page, or `status`
 Exactly one project has `featured: true` at any time — it's the homepage's spotlighted project, rendered as a large hero card. Every other project appears in the homepage's "Also live" grid, regardless of `status`. This is a hand-kept convention in `project.ts`, not runtime-enforced.
 _Avoid_: setting more than one project's `featured` to `true`, or reading "Also live" as filtered by `status`.
 
+**Claude skill**:
+A published workflow for Claude Code, shown in its own "Claude skills" group on the Projects page and linked to its source in the public skills repo. A Claude skill is not a project: it has no `status`, can never be `featured`, and never appears on the homepage.
+_Avoid_: calling them "skills" alone on the site (it reads as the author's résumé skills), or adding them to the projects list.
+
 **Also live**:
 The homepage section listing every project other than the one spotlighted in Featured. Named for the fact that most of the author's work is shipped, not for a `status` filter — an `in progress` project still shows up here.
 _Avoid_: assuming "live" means `status: "done"`.
