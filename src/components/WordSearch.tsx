@@ -2,13 +2,14 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import Doodle from "./Doodle"
 import { Tape } from "./Paper"
 
-// One set per round; the "again" button cycles through them. Keep words to 6
-// letters or fewer so every set fits the same grid.
+// One set per round; the "again" button cycles through them. Three rounds hide
+// my stack, the last my hobbies. The longest word sets the grid size, so keep
+// words to 9 letters or fewer.
 const WORD_SETS = [
-  ["ADWOA", "CRAFT", "LEAN", "WEB", "DEXWIN"],
-  ["BOOKS", "TEA", "OBSIDIAN", "WORDS", "IDEAS"],
-  ["ACCRA", "KENTE", "JOLLOF", "TWI", "AKWABA"],
-  ["REACT", "ASTRO", "CSS", "DEPLOY", "PIXEL"],
+  ["REACT", "NEXTJS", "ASTRO", "ZUSTAND", "THREEJS"],
+  ["NODE", "EXPRESS", "HONO", "POSTGRES", "MONGODB"],
+  ["TAILWIND", "STORYBOOK", "GIT", "CSS", "DEPLOY"],
+  ["PUZZLES", "BOOKS", "MUSIC", "TEA", "GYM", "WALKS"],
 ]
 const STORAGE_KEY = "missbaah-word-search-found"
 const SOUND_KEY = "missbaah-word-search-sound"
@@ -461,7 +462,9 @@ export default function WordSearch() {
     const target = shared ?? savedSet
     if (target === undefined || !WORD_SETS[target]) return
     setSetIndex(target)
-    setFound(new Set(target === savedSet ? savedFound : []))
+    // Saves from before the word sets changed can hold words no longer in play
+    const inPlay = (w: string) => WORD_SETS[target].includes(w)
+    setFound(new Set(target === savedSet ? savedFound.filter(inPlay) : []))
   }, [])
 
   const allFound = words.every((w) => found.has(w))

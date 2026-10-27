@@ -1,4 +1,6 @@
-// The one list of what I build with; About and the word search read from it
+// The one list of what I build with, shown on About. The word search's stack
+// rounds in WordSearch.tsx spell these out grid-style (NEXTJS, THREEJS), so
+// update them together
 export interface StackGroup {
   label: string
   items: string[]
