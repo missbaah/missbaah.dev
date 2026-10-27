@@ -20,7 +20,7 @@ export default function SkillCard(skill: SkillCardProps) {
         </p>
       )}
       <p className="font-hand text-lg text-ink-soft -rotate-2 ml-auto mt-auto">
-        <span className="marker-sweep">
+        <span className="marker-sweep whitespace-nowrap">
           read the source <Doodle name="arrow" />
         </span>
       </p>

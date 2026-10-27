@@ -73,7 +73,7 @@ export function ProjectLinks({
           href={siteLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="marker-sweep"
+          className="marker-sweep whitespace-nowrap"
         >
           Visit <Doodle name="arrow" />
         </a>
@@ -83,7 +83,7 @@ export function ProjectLinks({
           href={githubLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="marker-sweep"
+          className="marker-sweep whitespace-nowrap"
         >
           Code <Doodle name="arrow" />
         </a>
