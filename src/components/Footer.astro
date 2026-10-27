@@ -7,39 +7,41 @@ interface FooterProps {
 
 const { class: className } = Astro.props
 
+const EMAIL = "mailto:missbaah.brako@gmail.com"
 const links = [
-  { label: "Email", href: "mailto:missbaah.brako@gmail.com" },
+  { label: "Email", href: EMAIL },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/adwoaaddobrako/" },
   { label: "GitHub", href: "https://github.com/missbaah" },
 ]
 ---
 
-<footer
-  class={clsx(
-    className,
-    "flex flex-wrap items-baseline gap-x-3 gap-y-1 font-aeonik text-ink-soft"
-  )}
->
-  <span class="font-hand text-lg">Find me on</span>
-  {
-    links.map((link, i) => (
-      <>
-        {i > 0 && (
-          <span aria-hidden="true" class="text-separator">
-            /
-          </span>
-        )}
-        <a
-          href={link.href}
-          class="marker-sweep"
-          {...(link.href.startsWith("http") && {
-            target: "_blank",
-            rel: "noopener noreferrer",
-          })}
-        >
-          {link.label}
-        </a>
-      </>
-    ))
-  }
+<footer class={clsx(className, "flex flex-col gap-3 font-aeonik")}>
+  <p class="text-ink-muted">
+    Got a product idea or a role in mind?
+    <a href={EMAIL} class="marker font-hand text-lg leading-6">Say hi</a>
+  </p>
+  <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-ink-soft">
+    <span class="font-hand text-lg">Find me on</span>
+    {
+      links.map((link, i) => (
+        <>
+          {i > 0 && (
+            <span aria-hidden="true" class="text-separator">
+              /
+            </span>
+          )}
+          <a
+            href={link.href}
+            class="marker-sweep"
+            {...(link.href.startsWith("http") && {
+              target: "_blank",
+              rel: "noopener noreferrer",
+            })}
+          >
+            {link.label}
+          </a>
+        </>
+      ))
+    }
+  </div>
 </footer>
