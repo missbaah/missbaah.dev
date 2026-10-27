@@ -313,7 +313,7 @@ function Puzzle({
     <div className="paper border border-line rounded-sm shadow-sm p-3 mx-auto w-full max-w-sm">
       <div
         ref={gridRef}
-        className="relative grid border-r border-b border-line-soft touch-none select-none [-webkit-touch-callout:none]"
+        className="relative grid border-r border-b border-line-soft touch-none select-none [-webkit-user-select:none] [-webkit-touch-callout:none]"
         style={{
           gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))`,
           // Rules live in the background so the loops sit on top of them
