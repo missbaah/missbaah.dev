@@ -55,16 +55,17 @@ export default function ProjectsBoard({
               Projects
             </h1>
             <p className="text-ink-soft leading-7">
-              You met me at a very WIP project section. Fret not! Live projects
-              soon. You can also check out my{" "}
+              What I'm building: some shipped, some in progress, plus the
+              Claude skills I use every day. More on my{" "}
               <a
                 className="text-pink-link hover:text-pink-link-hover transition-colors"
                 href="https://github.com/missbaah"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                GitHub profile
+                GitHub
               </a>
+              .
             </p>
           </div>
 
