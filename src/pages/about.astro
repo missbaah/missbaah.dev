@@ -4,6 +4,7 @@ import "../styles/global.css"
 import WordSearch from "../components/WordSearch.tsx"
 import Footer from "../components/Footer.astro"
 import { stack } from "../data/stack.ts"
+import { work } from "../data/work.ts"
 ---
 
 <Layout pageTitle="About | Beebe Brako">
@@ -42,6 +43,35 @@ import { stack } from "../data/stack.ts"
           ))
         }
       </div>
+      <!-- Work history on a taped slip: one row per role, badge for where I worked -->
+      <section
+        class="relative paper border border-line rounded-sm shadow-sm px-5 pt-6 pb-4 md:px-8 md:pt-7 md:pb-5 max-w-2xl -rotate-[0.4deg] flex flex-col"
+      >
+        <span
+          aria-hidden="true"
+          class="absolute -top-3 right-10 h-6 w-20 bg-pink/60 rotate-3"></span>
+        <h2 class="text-sm text-ink-soft mb-2">Work</h2>
+        <ul class="flex flex-col">
+          {
+            work.map((job) => (
+              <li class="grid grid-cols-[1fr_auto] md:grid-cols-[9.5rem_1fr_6.5rem_4.5rem] gap-x-3 md:gap-x-4 gap-y-0.5 items-baseline py-2.5 border-t border-dashed border-line-strong first:border-t-0">
+                <span class="font-aeonik font-medium text-ink">
+                  {job.company}
+                </span>
+                <span class="col-start-2 row-start-1 md:col-start-4 justify-self-end text-xs px-2 py-0.5 rounded-full bg-pink text-pink-ink">
+                  {job.mode}
+                </span>
+                <span class="text-sm text-ink-muted md:col-start-2 md:row-start-1">
+                  {job.title}
+                </span>
+                <span class="text-sm text-ink-soft text-right md:col-start-3 md:row-start-1">
+                  {job.dates}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
       <!-- A slip of paper taped to the page, with the label scribbled beneath -->
       <figure
         class="relative self-start paper border border-line rounded-sm shadow-sm px-6 pt-7 pb-5 md:px-8 max-w-xl rotate-[0.6deg] flex flex-col gap-3"
