@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react"
-import { Theme } from "@radix-ui/themes"
 import type { ProjectCardProps } from "../data/project"
 import type { SkillCardProps } from "../data/skill"
 import ProjectCard from "./ProjectCard"
@@ -47,7 +46,7 @@ export default function ProjectsBoard({
   const tabs = TABS.filter((tab) => groupSizes[tab.value] > 0)
 
   return (
-    <Theme data-is-root-theme="false" className="bg-transparent!">
+    <div>
       <section className="flex flex-col gap-6 mt-10 ">
         <section className="flex flex-col md:flex-row gap-4 items-end">
           <div className="flex flex-col gap-4">
@@ -143,6 +142,6 @@ export default function ProjectsBoard({
           )}
         </div>
       </section>
-    </Theme>
+    </div>
   )
 }
