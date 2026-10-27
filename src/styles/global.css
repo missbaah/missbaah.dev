@@ -21,6 +21,9 @@
   --pink-link: #a3324f; /* inline links           */
   --pink-link-hover: #7f2440;
 
+  --sage: #d3e6c9; /* green highlighter, pairs with --pink */
+  --sage-ink: #24381f; /* text on --sage          */
+
   --status-done: #3f9153;
   --status-wip: #b06f00;
 
@@ -57,6 +60,12 @@ body {
   background-size: 100% 62%;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+
+/* Green stroke for labels that sit beside pink ones, e.g. work mode */
+.marker-green {
+  --marker-fill: var(--sage);
+  color: var(--sage-ink);
 }
 
 /* A lighter stroke, hidden until hover, then drawn in from the left */
