@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro"
 import "../styles/global.css"
 import WordSearch from "../components/WordSearch.tsx"
 import Footer from "../components/Footer.astro"
+import { stack } from "../data/stack.ts"
 ---
 
 <Layout pageTitle="About | Beebe Brako">
@@ -29,6 +30,17 @@ import Footer from "../components/Footer.astro"
             <span class="marker font-hand text-lg leading-6">p.s there's one waiting for you below ;)</span>
           </p>
         </div>
+      </div>
+      <div class="flex flex-col gap-2.5">
+        <span class="text-sm text-ink-soft">Stack</span>
+        {
+          stack.map((group) => (
+            <p class="text-[15.5px] leading-6 text-ink-muted">
+              <span class="text-ink">{group.label}:</span>{" "}
+              {group.items.join(", ")}
+            </p>
+          ))
+        }
       </div>
       <!-- A slip of paper taped to the page, with the label scribbled beneath -->
       <figure
