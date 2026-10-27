@@ -7,6 +7,9 @@ import sitemap from "@astrojs/sitemap"
 // https://astro.build/config
 export default defineConfig({
   site: "https://beebebrako.com",
+  // Fetch a page as soon as its link is hovered or tapped, so the click lands
+  // on something already downloaded
+  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   vite: {
     plugins: [tailwindcss()],
   },
