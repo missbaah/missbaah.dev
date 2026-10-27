@@ -12,6 +12,8 @@ const navItems = [
 ]
 // Strip the trailing slash so "/projects/" in the built site matches "/projects"
 const pathname = Astro.url.pathname.replace(/(.)\/$/, "$1")
+// Link to the slashed URL the host serves, skipping a 307 redirect per click
+const hrefFor = (path: string) => (path === "/" ? path : `${path}/`)
 ---
 
 <nav class="flex w-full md:pt-8.5 md:pb-6 p-5">
@@ -24,7 +26,7 @@ const pathname = Astro.url.pathname.replace(/(.)\/$/, "$1")
               item.path === pathname ? "marker marker-draw font-bold" : "marker-sweep",
               "md:text-lg"
             )}
-            href={item.path}
+            href={hrefFor(item.path)}
           >
             {item.name}
           </a>
