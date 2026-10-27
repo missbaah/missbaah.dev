@@ -18,17 +18,27 @@ function getGreeting() {
 }
 
 export default function GreetingClock() {
-  const [greeting, setGreeting] = useState(getGreeting)
+  // The page is built ahead of time, so reading the clock during render would
+  // bake in the build's time and fail hydration; wait for the visitor's clock
+  const [greeting, setGreeting] = useState<ReturnType<
+    typeof getGreeting
+  > | null>(null)
 
   useEffect(() => {
+    setGreeting(getGreeting())
     const id = setInterval(() => setGreeting(getGreeting()), 30_000)
     return () => clearInterval(id)
   }, [])
 
+  // min-h holds the line's height so the heading doesn't jump when it fills in
   return (
-    <p className="flex gap-2.5 items-center text-sm">
-      <Doodle name={greeting.icon} className="text-base" />
-      {greeting.label} &#x2022; {greeting.time}
+    <p className="flex gap-2.5 items-center text-sm min-h-5">
+      {greeting && (
+        <>
+          <Doodle name={greeting.icon} className="text-base" />
+          {greeting.label} &#x2022; {greeting.time}
+        </>
+      )}
     </p>
   )
 }
