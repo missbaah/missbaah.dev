@@ -14,6 +14,11 @@ export default function SkillCard(skill: SkillCardProps) {
       <p className="font-aeonik text-sm text-ink-muted leading-6">
         {skill.desc}
       </p>
+      {skill.afterUse && (
+        <p className="font-aeonik text-sm text-ink-soft leading-6">
+          {skill.afterUse}
+        </p>
+      )}
       <p className="font-hand text-lg text-ink-soft -rotate-2 ml-auto mt-auto">
         <span className="marker-sweep">
           read the source <Doodle name="arrow" />
