@@ -16,7 +16,7 @@ export const work: Job[] = [
   {
     company: "AMAKA Studio",
     title: "Frontend Developer",
-    dates: "2024 – 2026",
+    dates: "2024 – 2025",
     mode: "Remote",
   },
   {
